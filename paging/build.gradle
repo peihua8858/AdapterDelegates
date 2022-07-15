@@ -33,3 +33,5 @@ dependencies {
     testImplementation rootProject.ext.junit
     testImplementation rootProject.ext.mockito
 }
+//apply plugin: 'com.github.dcendents.android-maven'
+group='com.github.peihua8858'

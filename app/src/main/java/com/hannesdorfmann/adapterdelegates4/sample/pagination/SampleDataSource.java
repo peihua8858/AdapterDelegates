@@ -1,7 +1,10 @@
 package com.hannesdorfmann.adapterdelegates4.sample.pagination;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
+import com.hannesdorfmann.adapterdelegates4.sample.R;
 import com.hannesdorfmann.adapterdelegates4.sample.model.Advertisement;
 import com.hannesdorfmann.adapterdelegates4.sample.model.Cat;
 import com.hannesdorfmann.adapterdelegates4.sample.model.DisplayableItem;
@@ -18,7 +21,7 @@ import androidx.paging.DataSource;
 import androidx.paging.PositionalDataSource;
 
 public class SampleDataSource extends PositionalDataSource<DisplayableItem> {
-
+    Handler mHandler = new android.os.Handler(Looper.getMainLooper());
     private Random random = new Random();
 
     private List<DisplayableItem> nextPage(int size) {
@@ -58,16 +61,20 @@ public class SampleDataSource extends PositionalDataSource<DisplayableItem> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams params, @NonNull LoadInitialCallback<DisplayableItem> callback) {
-        List<DisplayableItem> displayableItems = nextPage(params.requestedLoadSize);
-        Log.d("PaginationSource", "pagesize " + params.pageSize + " placeholder " + params.placeholdersEnabled + " requested " + params.requestedLoadSize + " startpos " + params.requestedStartPosition);
-        callback.onResult(displayableItems, 0, 200);
+        mHandler.postDelayed(() -> {
+            List<DisplayableItem> displayableItems = nextPage(params.requestedLoadSize);
+            Log.d("PaginationSource", "pagesize " + params.pageSize + " placeholder " + params.placeholdersEnabled + " requested " + params.requestedLoadSize + " startpos " + params.requestedStartPosition);
+            callback.onResult(displayableItems, 0, 2000);
+        }, 2000);
     }
 
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<DisplayableItem> callback) {
-        List<DisplayableItem> displayableItems = nextPage(params.loadSize);
-        Log.d("PaginationSource", "loadSize " + params.loadSize + " startPosition " + params.startPosition);
-        callback.onResult(displayableItems);
+        mHandler.postDelayed(() -> {
+            List<DisplayableItem> displayableItems = nextPage(params.loadSize);
+            Log.d("PaginationSource", "loadSize " + params.loadSize + " startPosition " + params.startPosition);
+            callback.onResult(displayableItems);
+        }, 2000);
     }
 
 
