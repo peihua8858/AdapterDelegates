@@ -30,6 +30,7 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
  */
 inline fun <reified I : T, T> adapterDelegate(
     @LayoutRes layout: Int,
+    noinline itemType: () -> Int = { -1 },
     noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
     noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
         LayoutInflater.from(parent.context).inflate(
@@ -43,6 +44,7 @@ inline fun <reified I : T, T> adapterDelegate(
 
     return DslListAdapterDelegate(
         layout = layout,
+        itemType = itemType,
         on = on,
         initializerBlock = block,
         layoutInflater = layoutInflater
@@ -61,6 +63,7 @@ inline fun <reified I : T, T> adapterDelegate(
  */
 inline fun <reified I : T, T> adapterMutableListDelegate(
     @LayoutRes layout: Int,
+    noinline itemType: () -> Int = { -1 },
     noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
     noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
         LayoutInflater.from(parent.context).inflate(
@@ -74,6 +77,7 @@ inline fun <reified I : T, T> adapterMutableListDelegate(
 
     return DslListAdapterDelegate(
         layout = layout,
+        itemType = itemType,
         on = on,
         initializerBlock = block,
         layoutInflater = layoutInflater
@@ -87,6 +91,7 @@ inline fun <reified I : T, T> adapterMutableListDelegate(
 @PublishedApi
 internal class DslListAdapterDelegate<I : T, T>(
     @LayoutRes private val layout: Int,
+    private val itemType: () -> Int,
     private val on: (item: T, items: List<T>, position: Int) -> Boolean,
     private val initializerBlock: AdapterDelegateViewHolder<I>.() -> Unit,
     private val layoutInflater: (parent: ViewGroup, layout: Int) -> View

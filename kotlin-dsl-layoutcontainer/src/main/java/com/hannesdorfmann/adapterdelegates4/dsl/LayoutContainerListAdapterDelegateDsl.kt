@@ -34,6 +34,7 @@ import kotlinx.android.extensions.LayoutContainer
  */
 inline fun <reified I : T, T> adapterDelegateLayoutContainer(
     @LayoutRes layout: Int,
+    noinline itemType: () -> Int = { -1 },
     noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
     noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
         LayoutInflater.from(parent.context).inflate(
@@ -47,6 +48,7 @@ inline fun <reified I : T, T> adapterDelegateLayoutContainer(
 
     return DslLayoutContainerListAdapterDelegate(
         layout = layout,
+        itemType = itemType,
         on = on,
         initializerBlock = block,
         layoutInflater = layoutInflater
@@ -55,6 +57,7 @@ inline fun <reified I : T, T> adapterDelegateLayoutContainer(
 
 inline fun <reified I : T, T> adapterMutableListDelegateLayoutContainer(
     @LayoutRes layout: Int,
+    noinline itemType: () -> Int = { -1 },
     noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
     noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
         LayoutInflater.from(parent.context).inflate(
@@ -68,6 +71,7 @@ inline fun <reified I : T, T> adapterMutableListDelegateLayoutContainer(
 
     return DslLayoutContainerListAdapterDelegate(
         layout = layout,
+        itemType = itemType,
         on = on,
         initializerBlock = block,
         layoutInflater = layoutInflater
@@ -77,6 +81,7 @@ inline fun <reified I : T, T> adapterMutableListDelegateLayoutContainer(
 @PublishedApi
 internal class DslLayoutContainerListAdapterDelegate<I : T, T>(
     @LayoutRes private val layout: Int,
+    private val itemType: () -> Int,
     private val on: (item: T, items: List<T>, position: Int) -> Boolean,
     private val initializerBlock: AdapterDelegateLayoutContainerViewHolder<I>.() -> Unit,
     private val layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View
@@ -92,6 +97,10 @@ internal class DslLayoutContainerListAdapterDelegate<I : T, T>(
         ).also {
             initializerBlock(it)
         }
+
+    override fun getItemType(): Int {
+        return itemType()
+    }
 
     override fun onBindViewHolder(
         item: I,

@@ -59,7 +59,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.github.peihua8858'
                 artifactId = 'adapterdelegates4-kotlin-dsl-viewbinding'
-                version = '4.3.2.5'
+                version = '4.3.2.6'
                 artifact(sourceJar)
             }
         }
