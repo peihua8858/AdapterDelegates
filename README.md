@@ -19,7 +19,7 @@ See [releases section](https://github.com/sockeqwe/AdapterDelegates/releases)
 There are 2 artifacts for kotlin users that allow you to write Adapter Delegates more convenient by providing a `DSL`:
 
 ## Dependencies
-lastVersion：[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]
+lastVersion：![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)
 ```
 implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl:${lastVersion}'
 
