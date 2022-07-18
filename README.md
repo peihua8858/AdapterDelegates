@@ -19,15 +19,15 @@ See [releases section](https://github.com/sockeqwe/AdapterDelegates/releases)
 There are 2 artifacts for kotlin users that allow you to write Adapter Delegates more convenient by providing a `DSL`:
 
 ## Dependencies
-
+lastVersion：[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]
 ```
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl:${lastVersion}'
 
 // If you use Kotlin Android Extensions and synthetic properties (alternative to findViewById())
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-layoutcontainer:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-layoutcontainer:${lastVersion}'
 
 // If you use ViewBinding
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-viewbinding:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-viewbinding:${lastVersion}'
 ```
 
 ## How to use it
@@ -350,7 +350,7 @@ public class DiffAdapter extends AsyncListDifferDelegationAdapter<Animal> {
 There is an additional artifact for the pagination library:
 
 ```gradle
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-pagination:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-pagination:${lastVersion}'
 ```
 
 Use `PagedListDelegationAdapter`.
