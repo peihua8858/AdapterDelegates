@@ -1,5 +1,6 @@
 # AdapterDelegates
 [![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)](https://jitpack.io/#peihua8858/AdapterDelegates)
+
 Read the motivation for this project in [my blog post](http://hannesdorfmann.com/android/adapter-delegates).
 
 The idea of this library is to build your adapters by composing reusable components.
