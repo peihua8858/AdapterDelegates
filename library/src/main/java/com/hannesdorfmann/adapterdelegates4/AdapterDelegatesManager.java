@@ -73,13 +73,13 @@ public class AdapterDelegatesManager<T> {
      */
     protected SparseArrayCompat<AdapterDelegate<T>> delegates = new SparseArrayCompat();
     protected AdapterDelegate<T> fallbackDelegate;
-    
+
     /**
      * Creates a AdapterDelegatesManager without any delegates.
      */
     public AdapterDelegatesManager() {
     }
-    
+
     /**
      * Creates a AdapterDelegatesManager which already has the gived delegates added to it.
      */
@@ -104,14 +104,17 @@ public class AdapterDelegatesManager<T> {
      * @see #addDelegate(int, boolean, AdapterDelegate)
      */
     public AdapterDelegatesManager<T> addDelegate(@NonNull AdapterDelegate<T> delegate) {
-        // algorithm could be improved since there could be holes,
-        // but it's very unlikely that we reach Integer.MAX_VALUE and run out of unused indexes
-        int viewType = delegates.size();
-        while (delegates.get(viewType) != null) {
-            viewType++;
-            if (viewType == FALLBACK_DELEGATE_VIEW_TYPE) {
-                throw new IllegalArgumentException(
-                        "Oops, we are very close to Integer.MAX_VALUE. It seems that there are no more free and unused view type integers left to add another AdapterDelegate.");
+        int viewType = delegate.getItemType();
+        if (viewType == -1) {
+            // algorithm could be improved since there could be holes,
+            // but it's very unlikely that we reach Integer.MAX_VALUE and run out of unused indexes
+            viewType = delegates.size();
+            while (delegates.get(viewType) != null) {
+                viewType++;
+                if (viewType == FALLBACK_DELEGATE_VIEW_TYPE) {
+                    throw new IllegalArgumentException(
+                            "Oops, we are very close to Integer.MAX_VALUE. It seems that there are no more free and unused view type integers left to add another AdapterDelegate.");
+                }
             }
         }
         return addDelegate(viewType, false, delegate);
@@ -236,6 +239,9 @@ public class AdapterDelegatesManager<T> {
         for (int i = 0; i < delegatesCount; i++) {
             AdapterDelegate<T> delegate = delegates.valueAt(i);
             if (delegate.isForViewType(items, position)) {
+                if (delegate.getItemType() != -1) {
+                    return delegate.getItemType();
+                }
                 return delegates.keyAt(i);
             }
         }
@@ -249,7 +255,7 @@ public class AdapterDelegatesManager<T> {
         if (items instanceof List<?>) {
             String itemString = ((List<?>) items).get(position).toString();
             errorMessage = "No AdapterDelegate added that matches item=" + itemString + " at position=" + position + " in data source";
-        }  else {
+        } else {
             errorMessage = "No AdapterDelegate added for item at position=" + position + ". items=" + items;
         }
 
@@ -426,7 +432,9 @@ public class AdapterDelegatesManager<T> {
         if (delegate == null) {
             throw new NullPointerException("Delegate is null");
         }
-
+        if (delegate.getItemType() != -1) {
+            return delegate.getItemType();
+        }
         int index = delegates.indexOfValue(delegate);
         if (index == -1) {
             return -1;

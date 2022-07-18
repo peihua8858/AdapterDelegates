@@ -45,6 +45,10 @@ public abstract class AdapterDelegate<T> {
      */
     protected abstract boolean isForViewType(@NonNull T items, int position);
 
+    protected int getItemType() {
+        return -1;
+    }
+
     /**
      * Creates the  {@link RecyclerView.ViewHolder} for the given data source item
      *
