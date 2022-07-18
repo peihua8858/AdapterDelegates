@@ -34,6 +34,10 @@ dependencies {
     testImplementation rootProject.ext.junit
     testImplementation rootProject.ext.mockito
 }
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
 afterEvaluate {
     publishing {
         publications {
@@ -45,7 +49,8 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.github.peihua8858'
                 artifactId = 'adapterdelegates4-kotlin-dsl'
-                version = '4.3.2.4'
+                version = '4.3.2.5'
+                artifact(sourceJar)
             }
         }
     }
