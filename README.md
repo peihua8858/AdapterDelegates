@@ -21,13 +21,13 @@ There are 2 artifacts for kotlin users that allow you to write Adapter Delegates
 ## Dependencies
 
 ```
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl:4.3.2.6'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
 
 // If you use Kotlin Android Extensions and synthetic properties (alternative to findViewById())
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-layoutcontainer:4.3.2.6'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-layoutcontainer:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
 
 // If you use ViewBinding
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2.6'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-viewbinding:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
 ```
 
 ## How to use it
@@ -151,7 +151,7 @@ fun catAdapterDelegate() = adapterDelegate<Cat, Animal> {
 This library is available on maven central:
 
 ```groovy
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4:4.3.2.6'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
 ```
 [![Build Status](https://travis-ci.org/sockeqwe/AdapterDelegates.svg?branch=master)](https://travis-ci.org/sockeqwe/AdapterDelegates)
 
@@ -350,7 +350,7 @@ public class DiffAdapter extends AsyncListDifferDelegationAdapter<Animal> {
 There is an additional artifact for the pagination library:
 
 ```gradle
-implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-pagination:4.3.2.6'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-pagination:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
 ```
 
 Use `PagedListDelegationAdapter`.
