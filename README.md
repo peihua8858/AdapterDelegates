@@ -1,4 +1,6 @@
 # AdapterDelegates
+[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)](https://jitpack.io/#peihua8858/AdapterDelegates)
+
 Read the motivation for this project in [my blog post](http://hannesdorfmann.com/android/adapter-delegates).
 
 The idea of this library is to build your adapters by composing reusable components.
@@ -17,15 +19,15 @@ See [releases section](https://github.com/sockeqwe/AdapterDelegates/releases)
 There are 2 artifacts for kotlin users that allow you to write Adapter Delegates more convenient by providing a `DSL`:
 
 ## Dependencies
-
+lastVersion：![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)
 ```
-implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl:4.3.2'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl:${lastVersion}'
 
 // If you use Kotlin Android Extensions and synthetic properties (alternative to findViewById())
-implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl-layoutcontainer:4.3.2'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-layoutcontainer:${lastVersion}'
 
 // If you use ViewBinding
-implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-kotlin-dsl-viewbinding:${lastVersion}'
 ```
 
 ## How to use it
@@ -149,7 +151,7 @@ fun catAdapterDelegate() = adapterDelegate<Cat, Animal> {
 This library is available on maven central:
 
 ```groovy
-implementation 'com.hannesdorfmann:adapterdelegates4:4.3.2'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4:[![](https://jitpack.io/v/peihua8858/AdapterDelegates.svg)]'
 ```
 [![Build Status](https://travis-ci.org/sockeqwe/AdapterDelegates.svg?branch=master)](https://travis-ci.org/sockeqwe/AdapterDelegates)
 
@@ -158,7 +160,7 @@ Please note that since 4.0 the group id has been changed to `adapterdelegates4`.
 ### Snapshot
 
 ```groovy
-implementation 'com.hannesdorfmann:adapterdelegates4:4.3.3-SNAPSHOT'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4:4.3.3-SNAPSHOT'
 ```
 
 You also have to add the url to the snapshot repository:
@@ -348,7 +350,7 @@ public class DiffAdapter extends AsyncListDifferDelegationAdapter<Animal> {
 There is an additional artifact for the pagination library:
 
 ```gradle
-implementation 'com.hannesdorfmann:adapterdelegates4-pagination:4.3.2'
+implementation 'com.github.peihua8858.AdapterDelegates:adapterdelegates4-pagination:${lastVersion}'
 ```
 
 Use `PagedListDelegationAdapter`.
