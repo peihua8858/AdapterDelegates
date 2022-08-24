@@ -162,7 +162,7 @@ public class ListDelegationAdapter<T extends List<?>> extends AbsDelegationAdapt
             } else {
                 int position = this.items.size();
                 this.items.addAll((Collection) items);
-                notifyItemRangeInserted(position - 1, items.size());
+                notifyItemRangeInserted(position, items.size());
                 if (this.items.size() == items.size()) {
                     notifyDataSetChanged();
                 }
