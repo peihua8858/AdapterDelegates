@@ -16,12 +16,15 @@
 
 package com.hannesdorfmann.adapterdelegates4;
 
+import android.os.Bundle;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.SparseArrayCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -59,7 +62,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
 
     protected AdapterDelegatesManager<T> delegatesManager;
-    @Nullable protected T items;
+    @Nullable
+    protected T items;
 
     public AbsDelegationAdapter() {
         this(new AdapterDelegatesManager<T>());
@@ -124,6 +128,10 @@ public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
         delegatesManager.onViewDetachedFromWindow(holder);
     }
 
+    public SparseArrayCompat<AdapterDelegate<T>> getDeletes() {
+        return delegatesManager.delegates;
+    }
+
     /**
      * Get the items / data source of this adapter
      *
@@ -141,5 +149,51 @@ public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
      */
     public void setItems(@Nullable T items) {
         this.items = items;
+    }
+
+    /**
+     * Called to ask the delegate to save its current dynamic state, so it
+     * can later be reconstructed in a new instance if its process is
+     * restarted.  If a new instance of the delegate later needs to be
+     * created, the data you place in the Bundle here will be available
+     * in the Bundle given to {@link #onRestoreInstanceState(Bundle)}.
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
+    @CallSuper
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        SparseArrayCompat<AdapterDelegate<T>> delegates = getDeletes();
+        if (delegates.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < delegates.size(); i++) {
+            int key = delegates.keyAt(i);
+            AdapterDelegate<T> delegate = delegates.get(key);
+            if (delegate != null) {
+                delegate.onSaveInstanceState(outState);
+            }
+        }
+    }
+
+    /**
+     * The default
+     * implementation of this method performs a restore of any view state that
+     * had previously been frozen by {@link #onSaveInstanceState}.
+     *
+     * @param state the data most recently supplied in {@link #onSaveInstanceState}.
+     */
+    @CallSuper
+    public void onRestoreInstanceState(Bundle state) {
+        SparseArrayCompat<AdapterDelegate<T>> delegates = getDeletes();
+        if (delegates.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < delegates.size(); i++) {
+            int key = delegates.keyAt(i);
+            AdapterDelegate<T> delegate = delegates.get(key);
+            if (delegate != null) {
+                delegate.onRestoreInstanceState(state);
+            }
+        }
     }
 }

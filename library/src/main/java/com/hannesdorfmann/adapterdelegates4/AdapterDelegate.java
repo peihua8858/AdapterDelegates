@@ -16,6 +16,7 @@
 
 package com.hannesdorfmann.adapterdelegates4;
 
+import android.os.Bundle;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -154,5 +155,28 @@ public abstract class AdapterDelegate<T> {
      * @param holder Holder of the view being detached
      */
     protected void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+    }
+
+    /**
+     * Called to ask the delegate to save its current dynamic state, so it
+     * can later be reconstructed in a new instance if its process is
+     * restarted.  If a new instance of the delegate later needs to be
+     * created, the data you place in the Bundle here will be available
+     * in the Bundle given to {@link #onRestoreInstanceState(Bundle)}.
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+    }
+
+    /**
+     * The default
+     * implementation of this method performs a restore of any view state that
+     * had previously been frozen by {@link #onSaveInstanceState}.
+     *
+     * @param state the data most recently supplied in {@link #onSaveInstanceState}.
+     */
+    public void onRestoreInstanceState(Bundle state) {
+
     }
 }

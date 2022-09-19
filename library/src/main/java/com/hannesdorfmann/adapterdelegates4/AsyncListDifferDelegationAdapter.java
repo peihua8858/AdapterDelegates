@@ -1,10 +1,13 @@
 package com.hannesdorfmann.adapterdelegates4;
 
+import android.os.Bundle;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.collection.SparseArrayCompat;
 import androidx.recyclerview.widget.AdapterListUpdateCallback;
 import androidx.recyclerview.widget.AsyncDifferConfig;
 import androidx.recyclerview.widget.AsyncListDiffer;
@@ -75,7 +78,7 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
         this.differ = new AsyncListDiffer<T>(new AdapterListUpdateCallback(this), differConfig);
         this.delegatesManager = delegatesManager;
     }
-    
+
     /**
      * Adds a list of {@link AdapterDelegate}s
      *
@@ -88,7 +91,7 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
         if (diffCallback == null) {
             throw new NullPointerException("ItemCallback is null");
         }
-        
+
         this.differ = new AsyncListDiffer<T>(this, diffCallback);
         this.delegatesManager = new AdapterDelegatesManager<List<T>>(delegates);
     }
@@ -152,6 +155,10 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
         delegatesManager.onViewDetachedFromWindow(holder);
     }
 
+    public SparseArrayCompat<AdapterDelegate<List<T>>> getDeletes() {
+        return delegatesManager.delegates;
+    }
+
     /**
      * Get the items / data source of this adapter
      *
@@ -173,7 +180,7 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
     /**
      * Set the items / data source of this adapter
      *
-     * @param items The items / data source
+     * @param items          The items / data source
      * @param commitCallback Runnable that is executed when the List is committed, if it is committed
      */
     public void setItems(List<T> items, Runnable commitCallback) {
@@ -183,5 +190,51 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return differ.getCurrentList().size();
+    }
+
+    /**
+     * Called to ask the delegate to save its current dynamic state, so it
+     * can later be reconstructed in a new instance if its process is
+     * restarted.  If a new instance of the delegate later needs to be
+     * created, the data you place in the Bundle here will be available
+     * in the Bundle given to {@link #onRestoreInstanceState(Bundle)}.
+     *
+     * @param outState Bundle in which to place your saved state.
+     */
+    @CallSuper
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        SparseArrayCompat<AdapterDelegate<List<T>>> delegates = getDeletes();
+        if (delegates.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < delegates.size(); i++) {
+            int key = delegates.keyAt(i);
+            AdapterDelegate<List<T>> delegate = delegates.get(key);
+            if (delegate != null) {
+                delegate.onSaveInstanceState(outState);
+            }
+        }
+    }
+
+    /**
+     * The default
+     * implementation of this method performs a restore of any view state that
+     * had previously been frozen by {@link #onSaveInstanceState}.
+     *
+     * @param state the data most recently supplied in {@link #onSaveInstanceState}.
+     */
+    @CallSuper
+    public void onRestoreInstanceState(Bundle state) {
+        SparseArrayCompat<AdapterDelegate<List<T>>> delegates = getDeletes();
+        if (delegates.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < delegates.size(); i++) {
+            int key = delegates.keyAt(i);
+            AdapterDelegate<List<T>> delegate = delegates.get(key);
+            if (delegate != null) {
+                delegate.onRestoreInstanceState(state);
+            }
+        }
     }
 }
