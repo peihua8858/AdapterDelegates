@@ -49,6 +49,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="Pagination" />
+        <Button
+            android:id="@+id/loadmore"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Load More" />
 
     </LinearLayout>
 

@@ -155,12 +155,16 @@ public class ListDelegationAdapter<T extends List<?>> extends AbsDelegationAdapt
         notifyDataSetChanged();
     }
 
+    public int contentPosition() {
+        return items != null ? this.items.size() : 0;
+    }
+
     public void addItems(T items) {
         if (items != null && !items.isEmpty()) {
             if (this.items == null || this.items.isEmpty()) {
                 setItems(items);
             } else {
-                int position = this.items.size();
+                int position = contentPosition();
                 this.items.addAll((Collection) items);
                 notifyItemRangeInserted(position, items.size());
                 if (this.items.size() == items.size()) {

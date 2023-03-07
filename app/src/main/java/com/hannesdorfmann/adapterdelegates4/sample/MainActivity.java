@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.hannesdorfmann.adapterdelegates4.sample.animations.AnimationDiffUtilsActivity;
+import com.hannesdorfmann.adapterdelegates4.sample.loadmore.LoadMoreActivity;
 import com.hannesdorfmann.adapterdelegates4.sample.model.Advertisement;
 import com.hannesdorfmann.adapterdelegates4.sample.model.Cat;
 import com.hannesdorfmann.adapterdelegates4.sample.model.DisplayableItem;
@@ -61,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, PaginationActivity.class));
+            }
+        });
+        findViewById(R.id.loadmore).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LoadMoreActivity.class));
             }
         });
     }

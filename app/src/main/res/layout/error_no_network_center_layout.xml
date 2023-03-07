@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:lineSpacingExtra="2dp"
+        android:text="You are not connected to the internet. Please connect to a network."
+        android:textColor="#2d2d2d"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/btn_retry"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="64dp"
+        android:background="@drawable/selector_grey_border_translucent_button"
+        android:gravity="center"
+        android:text="Retry"
+        android:textAllCaps="true"
+        android:textColor="#2d2d2d"
+        android:textSize="16sp" />
+</LinearLayout>

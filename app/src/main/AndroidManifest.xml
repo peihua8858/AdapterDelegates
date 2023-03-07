@@ -23,6 +23,7 @@
         <activity android:name=".animations.AnimationDiffUtilsActivity" />
         <activity android:name=".DiffActivity" />
         <activity android:name=".pagination.PaginationActivity" />
+        <activity android:name=".loadmore.LoadMoreActivity"/>
     </application>
 
 </manifest>
