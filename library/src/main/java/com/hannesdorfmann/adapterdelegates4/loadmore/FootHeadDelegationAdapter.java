@@ -141,8 +141,9 @@ public class FootHeadDelegationAdapter<T extends List<?>> extends ListDelegation
     public <I> I getItem(int position) {
         T items = getItems(position);
         if (items != null && !items.isEmpty()) {
-            if (position >= 0 && position < items.size()) {
-                return (I) items.get(position);
+            int realPos = getRealPosition(position);
+            if (realPos >= 0 && realPos < items.size()) {
+                return (I) items.get(realPos);
             }
         }
         return null;

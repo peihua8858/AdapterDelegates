@@ -109,4 +109,8 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
     void reset() {
         loadMoreAdapterDelegate.reset();
     }
+
+    public boolean hasLoadMoreView() {
+        return loadMoreAdapterDelegate.hasLoadMoreView();
+    }
 }
