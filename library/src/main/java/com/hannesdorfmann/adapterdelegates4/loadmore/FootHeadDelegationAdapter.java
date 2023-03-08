@@ -21,7 +21,7 @@ import java.util.List;
 public class FootHeadDelegationAdapter<T extends List<?>> extends ListDelegationAdapter<T> {
     protected T headData;
     protected T footData;
-    protected FootHeadDelegatesManager footHeadDelegatesManager;
+    protected final FootHeadDelegatesManager footHeadDelegatesManager;
 
     public FootHeadDelegationAdapter() {
         this(new FootHeadDelegatesManager<T>());

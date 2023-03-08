@@ -1,8 +1,12 @@
 package com.hannesdorfmann.adapterdelegates4.loadmore;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager;
 
@@ -16,7 +20,7 @@ import java.util.List;
  * @date 2023/3/6 10:21
  */
 public class LoadMoreDelegationAdapter<T extends List<?>> extends FootHeadDelegationAdapter<T> {
-    protected LoadMoreDelegatesManager loadMoreDelegatesManager;
+    protected final LoadMoreDelegatesManager loadMoreDelegatesManager;
 
     protected RecyclerView recyclerView = null;
 
@@ -33,9 +37,59 @@ public class LoadMoreDelegationAdapter<T extends List<?>> extends FootHeadDelega
         loadMoreDelegatesManager = (LoadMoreDelegatesManager) delegatesManager;
     }
 
+    protected boolean isFixedViewType(int type) {
+        return type == LoadMoreDelegatesManager.LOAD_MORE_ITEM_VIEW_TYPE;
+    }
+
+    /**
+     * When set to true, the item will layout using all span area. That means, if orientation
+     * is vertical, the view will have full width; if orientation is horizontal, the view will
+     * have full height.
+     * if the hold view use StaggeredGridLayoutManager they should using all span area
+     *
+     * @param holder
+     * @author dingpeihua
+     * @date 2023/3/8 10:15
+     * @version 1.0
+     */
+    protected void setFullSpan(RecyclerView.ViewHolder holder) {
+        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+        if (layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+            ((StaggeredGridLayoutManager.LayoutParams) layoutParams).setFullSpan(true);
+        }
+    }
+
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         this.recyclerView = recyclerView;
+        RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+        if (manager instanceof GridLayoutManager) {
+            GridLayoutManager layoutManager = (GridLayoutManager) manager;
+            GridLayoutManager.SpanSizeLookup defSpanSizeLookup = layoutManager.getSpanSizeLookup();
+            layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    int type = getItemViewType(position);
+                    if (isFixedViewType(type)) {
+                        return layoutManager.getSpanCount();
+                    }
+                    return defSpanSizeLookup.getSpanSize(position);
+                }
+            });
+        }
+    }
+
+    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        int type = holder.getItemViewType();
+        if (isFixedViewType(type)) {
+            setFullSpan(holder);
+        }
+    }
+
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        this.recyclerView = null;
     }
 
     public void setLoadMoreDelegate(@NonNull LoadMoreAdapterDelegate loadMoreDelegate) {
