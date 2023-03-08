@@ -37,7 +37,7 @@ public class LoadMoreDelegationAdapter<T extends List<?>> extends FootHeadDelega
         loadMoreDelegatesManager = (LoadMoreDelegatesManager) delegatesManager;
     }
 
-    protected boolean isFixedViewType(int type) {
+    protected boolean isFixedViewType(int type, int position) {
         return type == LoadMoreDelegatesManager.LOAD_MORE_ITEM_VIEW_TYPE;
     }
 
@@ -70,7 +70,7 @@ public class LoadMoreDelegationAdapter<T extends List<?>> extends FootHeadDelega
                 @Override
                 public int getSpanSize(int position) {
                     int type = getItemViewType(position);
-                    if (isFixedViewType(type)) {
+                    if (isFixedViewType(type, position)) {
                         return layoutManager.getSpanCount();
                     }
                     return defSpanSizeLookup.getSpanSize(position);
@@ -82,7 +82,7 @@ public class LoadMoreDelegationAdapter<T extends List<?>> extends FootHeadDelega
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         int type = holder.getItemViewType();
-        if (isFixedViewType(type)) {
+        if (isFixedViewType(type, holder.getBindingAdapterPosition())) {
             setFullSpan(holder);
         }
     }
