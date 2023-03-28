@@ -19,6 +19,7 @@ package com.hannesdorfmann.adapterdelegates4;
 import java.util.Collection;
 import java.util.List;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -41,7 +42,7 @@ import androidx.annotation.Nullable;
  * @param <T> The type of the items. Must be something that extends from List like List<Foo>
  * @author Hannes Dorfmann
  */
-public class ListDelegationAdapter<T extends List<?>> extends AbsDelegationAdapter<T> {
+public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<T> {
 
     public ListDelegationAdapter() {
         super();
@@ -153,6 +154,94 @@ public class ListDelegationAdapter<T extends List<?>> extends AbsDelegationAdapt
     public void setItems(@Nullable T items) {
         super.setItems(items);
         notifyDataSetChanged();
+    }
+
+    public void removeAt(@IntRange(from = 0) int position) {
+        if (items == null) {
+            return;
+        }
+        if (position >= items.size()) {
+            return;
+        }
+        this.items.remove(position);
+        int internalPosition = position;
+        notifyItemRemoved(internalPosition);
+        compatibilityDataSizeChanged(0);
+        notifyItemRangeChanged(internalPosition, this.items.size() - internalPosition);
+    }
+
+    public void remove(Object data) {
+        int index = this.items.indexOf(data);
+        if (index == -1) {
+            return;
+        }
+        removeAt(index);
+    }
+
+    /**
+     * add one new data in to certain location
+     * 在指定位置添加一条新数据
+     *
+     * @param position
+     */
+    public void addData(@IntRange(from = 0) int position,Object data) {
+        if (items == null) {
+            return;
+        }
+        this.items.add(position, data);
+        notifyItemInserted(position);
+        compatibilityDataSizeChanged(1);
+    }
+
+    /**
+     * add one new data
+     * 添加一条新数据
+     */
+    public <I>void addData(@NonNull I data) {
+        if (items == null) {
+            return;
+        }
+        this.items.add(data);
+        notifyItemInserted(this.items.size());
+        compatibilityDataSizeChanged(1);
+    }
+
+    /**
+     * add new data in to certain location
+     * 在指定位置添加数据
+     *
+     * @param position the insert position
+     * @param newData  the new data collection
+     */
+    public void addData(@IntRange(from = 0) int position,Collection newData ) {
+        if (items == null) {
+            return;
+        }
+        this.items.addAll(position, newData);
+        notifyItemRangeInserted(position , newData.size());
+        compatibilityDataSizeChanged(newData.size());
+    }
+
+    public void addData(@NonNull Collection newData) {
+        if (items == null) {
+            return;
+        }
+        this.items.addAll(newData);
+        notifyItemRangeInserted(this.items.size() - newData.size(), newData.size());
+        compatibilityDataSizeChanged(newData.size());
+    }
+    /**
+     * compatible getLoadMoreViewCount and getEmptyViewCount may change
+     *
+     * @param size Need compatible data size
+     */
+    protected void compatibilityDataSizeChanged(int size) {
+        if (items == null) {
+            return;
+        }
+        if (this.items.size() == size) {
+            notifyDataSetChanged();
+        }
     }
 
     public int contentPosition() {

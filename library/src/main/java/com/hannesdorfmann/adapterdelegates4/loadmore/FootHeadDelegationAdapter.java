@@ -1,5 +1,6 @@
 package com.hannesdorfmann.adapterdelegates4.loadmore;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +10,7 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager;
 import com.hannesdorfmann.adapterdelegates4.FootHeadDelegatesManager;
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ import java.util.List;
  * @version 1.0
  * @date 2023/3/6 10:21
  */
-public class FootHeadDelegationAdapter<T extends List<?>> extends ListDelegationAdapter<T> {
+public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAdapter<T> {
     protected T headData;
     protected T footData;
     protected final FootHeadDelegatesManager footHeadDelegatesManager;
@@ -171,5 +173,86 @@ public class FootHeadDelegationAdapter<T extends List<?>> extends ListDelegation
     @Override
     public int getItemViewType(int position) {
         return delegatesManager.getItemViewType(getItems(position), getRealPosition(position));
+    }
+
+    @Override
+    public void removeAt(@IntRange(from = 0) int position) {
+        if (items == null) {
+            return;
+        }
+        if (position >= items.size()) {
+            return;
+        }
+        this.items.remove(position);
+        int internalPosition = position + headCount();
+        notifyItemRemoved(internalPosition);
+        compatibilityDataSizeChanged(0);
+        notifyItemRangeChanged(internalPosition, this.items.size() - internalPosition);
+    }
+
+    @Override
+    public void remove(Object data) {
+        int index = this.items.indexOf(data);
+        if (index == -1) {
+            return;
+        }
+        removeAt(index);
+    }
+
+    /**
+     * add one new data in to certain location
+     * 在指定位置添加一条新数据
+     *
+     * @param position
+     */
+    @Override
+    public void addData(@IntRange(from = 0) int position, Object data) {
+        if (items == null) {
+            return;
+        }
+        this.items.add(position, data);
+        notifyItemInserted(position + headCount());
+        compatibilityDataSizeChanged(1);
+    }
+
+    /**
+     * add one new data
+     * 添加一条新数据
+     */
+    @Override
+    public <I> void addData(@NonNull I data) {
+        if (items == null) {
+            return;
+        }
+        this.items.add(data);
+        notifyItemInserted(this.items.size() + headCount());
+        compatibilityDataSizeChanged(1);
+    }
+
+    /**
+     * add new data in to certain location
+     * 在指定位置添加数据
+     *
+     * @param position the insert position
+     * @param newData  the new data collection
+     */
+    @Override
+    public void addData(@IntRange(from = 0) int position, Collection newData) {
+        if (items == null) {
+            return;
+        }
+        this.items.addAll(position, newData);
+        notifyItemRangeInserted(position + headCount(), newData.size());
+        compatibilityDataSizeChanged(newData.size());
+    }
+
+    @Override
+    public void addData(@NonNull Collection newData) {
+        if (items == null) {
+            return;
+        }
+        this.items.addAll(newData);
+        notifyItemRangeInserted(this.items.size() - newData.size() + headCount(), newData.size());
+        compatibilityDataSizeChanged(newData.size());
     }
 }

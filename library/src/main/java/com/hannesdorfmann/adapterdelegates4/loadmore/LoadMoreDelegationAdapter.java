@@ -19,7 +19,7 @@ import java.util.List;
  * @version 1.0
  * @date 2023/3/6 10:21
  */
-public class LoadMoreDelegationAdapter<T extends List<?>> extends FootHeadDelegationAdapter<T> {
+public class LoadMoreDelegationAdapter<T extends List> extends FootHeadDelegationAdapter<T> {
     protected final LoadMoreDelegatesManager loadMoreDelegatesManager;
 
     protected RecyclerView recyclerView = null;
