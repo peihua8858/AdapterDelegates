@@ -141,14 +141,22 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
 
     @Override
     public <I> I getItem(int position) {
-        T items = getItems(position);
-        if (items != null && !items.isEmpty()) {
-            int realPos = getRealPosition(position);
-            if (realPos >= 0 && realPos < items.size()) {
-                return (I) items.get(realPos);
-            }
+        int realPosition = getRealPosition(position);
+        if (realPosition < 0) {
+            return null;
         }
-        return null;
+        if (isHeadData(position)) {
+            if (headData != null && headData.size() > realPosition) {
+                return (I) headData.get(realPosition);
+            }
+            return null;
+        } else if (isFootData(position)) {
+            if (footData != null && footData.size() > realPosition) {
+                return (I) footData.get(realPosition);
+            }
+            return null;
+        }
+        return super.getItem(realPosition);
     }
 
     public int getRealPosition(int position) {
