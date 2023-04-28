@@ -14,7 +14,7 @@ abstract class ViewBindingAbsAdapterDelegate<T, VB : ViewBinding> : AbsAdapterDe
         @LayoutRes get
     abstract val vbFactory: (View) -> VB
 
-    final override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return AbsDelegateViewHolder(LayoutInflater.from(parent.context).inflate(layoutResId, parent, false), vbFactory)
     }
 
