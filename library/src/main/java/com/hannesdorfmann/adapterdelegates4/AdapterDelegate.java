@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,9 +45,9 @@ public abstract class AdapterDelegate<T> {
      * @param position The position in the datasource
      * @return true, if this item is responsible,  otherwise false
      */
-    protected abstract boolean isForViewType(@NonNull T items, int position);
+    public abstract boolean isForViewType(@NonNull T items, int position);
 
-    protected int getItemType() {
+    public int getItemType() {
         return -1;
     }
 
@@ -60,6 +61,16 @@ public abstract class AdapterDelegate<T> {
     abstract protected RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent);
 
     /**
+     * Creates the  {@link RecyclerView.ViewHolder} for the given data source item
+     *
+     * @param parent The ViewGroup parent of the given datasource
+     * @return The new instantiated {@link RecyclerView.ViewHolder}
+     */
+    public RecyclerView.ViewHolder createViewHolder(@NonNull ViewGroup parent) {
+        return onCreateViewHolder(parent);
+    }
+
+    /**
      * Called to bind the {@link RecyclerView.ViewHolder} to the item of the datas source set
      *
      * @param items    The data source
@@ -69,6 +80,17 @@ public abstract class AdapterDelegate<T> {
      */
     protected abstract void onBindViewHolder(@NonNull T items, int position,
                                              @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads);
+
+    /**
+     * Called to bind the {@link RecyclerView.ViewHolder} to the item of the datas source set
+     *
+     * @param items    The data source
+     * @param position The position in the datasource
+     * @param holder   The {@link RecyclerView.ViewHolder} to bind
+     */
+    public void bindViewHolder(@NonNull T items, int position, @NonNull RecyclerView.ViewHolder holder) {
+        onBindViewHolder(items, position, holder, new ArrayList<>());
+    }
 
     /**
      * Called when a view created by this adapter has been recycled.
@@ -88,7 +110,7 @@ public abstract class AdapterDelegate<T> {
      *
      * @param holder The ViewHolder for the view being recycled
      */
-    protected void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
     }
 
     /**
@@ -127,7 +149,7 @@ public abstract class AdapterDelegate<T> {
      * RecyclerView will check the View's transient state again before giving a final decision.
      * Default implementation returns false.
      */
-    protected boolean onFailedToRecycleView(@NonNull RecyclerView.ViewHolder holder) {
+    public boolean onFailedToRecycleView(@NonNull RecyclerView.ViewHolder holder) {
         return false;
     }
 
@@ -142,7 +164,7 @@ public abstract class AdapterDelegate<T> {
      *
      * @param holder Holder of the view being attached
      */
-    protected void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
     }
 
     /**
@@ -154,7 +176,7 @@ public abstract class AdapterDelegate<T> {
      *
      * @param holder Holder of the view being detached
      */
-    protected void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
     }
 
     /**

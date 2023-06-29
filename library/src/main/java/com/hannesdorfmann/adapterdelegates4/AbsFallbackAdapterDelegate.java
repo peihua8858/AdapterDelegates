@@ -19,7 +19,7 @@ public abstract class AbsFallbackAdapterDelegate<T> extends AdapterDelegate<T> {
    * @param position The position in the datasource
    * @return true
    */
-  @Override final protected boolean isForViewType(@NonNull Object items, int position) {
+  @Override final public boolean isForViewType(@NonNull Object items, int position) {
     return true;
   }
 }

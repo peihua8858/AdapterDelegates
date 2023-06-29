@@ -43,7 +43,7 @@ public abstract class AbsListItemAdapterDelegate<I extends T, T, VH extends Recy
         extends AdapterDelegate<List<T>> {
 
     @Override
-    protected final boolean isForViewType(@NonNull List<T> items, int position) {
+    public final boolean isForViewType(@NonNull List<T> items, int position) {
         return isForViewType(items.get(position), items, position);
     }
 
