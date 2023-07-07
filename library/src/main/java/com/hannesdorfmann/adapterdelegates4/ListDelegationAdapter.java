@@ -67,6 +67,19 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
         return items == null ? 0 : items.size();
     }
 
+    /**
+     * 如果返回 -1，表示不存在
+     *
+     * @param item T?
+     * @return Int
+     */
+    public <E> int getItemPosition(E item) {
+        if (item != null && items != null && !items.isEmpty()) {
+            return items.indexOf(item);
+        }
+        return -1;
+    }
+
     public ListDelegationAdapter<T> addDelegate(@NonNull AdapterDelegate<T>... delegates) {
         if (delegatesManager == null) {
             delegatesManager = new AdapterDelegatesManager<>(delegates);
@@ -184,7 +197,7 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
      *
      * @param position
      */
-    public void addData(@IntRange(from = 0) int position,Object data) {
+    public void addData(@IntRange(from = 0) int position, Object data) {
         if (items == null) {
             return;
         }
@@ -197,7 +210,7 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
      * add one new data
      * 添加一条新数据
      */
-    public <I>void addData(@NonNull I data) {
+    public <I> void addData(@NonNull I data) {
         if (items == null) {
             return;
         }
@@ -213,12 +226,12 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
      * @param position the insert position
      * @param newData  the new data collection
      */
-    public void addData(@IntRange(from = 0) int position,Collection newData ) {
+    public void addData(@IntRange(from = 0) int position, Collection newData) {
         if (items == null) {
             return;
         }
         this.items.addAll(position, newData);
-        notifyItemRangeInserted(position , newData.size());
+        notifyItemRangeInserted(position, newData.size());
         compatibilityDataSizeChanged(newData.size());
     }
 
@@ -230,6 +243,7 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
         notifyItemRangeInserted(this.items.size() - newData.size(), newData.size());
         compatibilityDataSizeChanged(newData.size());
     }
+
     /**
      * compatible getLoadMoreViewCount and getEmptyViewCount may change
      *
