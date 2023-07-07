@@ -155,10 +155,9 @@ public class LoadMoreDelegationAdapter<T extends List> extends FootHeadDelegatio
     }
 
     public void loadMoreToLoading() {
-        if (loadMoreDelegatesManager == null) {
-            return;
+        if (loadMoreDelegatesManager != null) {
+            loadMoreDelegatesManager.loadMoreToLoading();
         }
-        loadMoreDelegatesManager.loadMoreToLoading();
     }
 
 

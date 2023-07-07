@@ -49,35 +49,40 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
         }
         return super.getDelegateForViewType(viewType);
     }
+
     public void setEnableLoadMore(boolean isEnableLoadMore) {
-        loadMoreAdapterDelegate.setEnableLoadMore(isEnableLoadMore);
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.setEnableLoadMore(isEnableLoadMore);
     }
+
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
-        loadMoreAdapterDelegate.setOnLoadMoreListener(onLoadMoreListener);
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.setOnLoadMoreListener(onLoadMoreListener);
     }
 
     public void setAdapter(LoadMoreDelegationAdapter adapter) {
-        loadMoreAdapterDelegate.setAdapter(adapter);
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.setAdapter(adapter);
     }
 
     public void setPreLoadNumber(int preLoadNumber) {
-        loadMoreAdapterDelegate.setPreLoadNumber(preLoadNumber);
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.setPreLoadNumber(preLoadNumber);
     }
 
     public boolean isLoading() {
-        return loadMoreAdapterDelegate.isLoading();
+        if (isEnabledLoadMore()) return loadMoreAdapterDelegate.isLoading();
+        return false;
     }
 
     public LoadMoreStatus loadMoreStatus() {
-        return loadMoreAdapterDelegate.loadMoreStatus;
+        if (isEnabledLoadMore()) return loadMoreAdapterDelegate.loadMoreStatus;
+        return null;
     }
 
     public void setLoadMoreStatus(LoadMoreStatus loadMoreStatus) {
-        loadMoreAdapterDelegate.loadMoreStatus = loadMoreStatus;
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreStatus = loadMoreStatus;
     }
 
     public boolean loadMoreToLoading() {
-        return loadMoreAdapterDelegate.loadMoreToLoading();
+        if (isEnabledLoadMore()) return loadMoreAdapterDelegate.loadMoreToLoading();
+        return false;
     }
 
     /**
@@ -86,31 +91,34 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
      * @param gone if true gone the load more view
      */
     void loadMoreEnd(boolean gone) {
-        loadMoreAdapterDelegate.loadMoreEnd(gone);
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreEnd(gone);
     }
 
     /**
      * Refresh complete
      */
     void loadMoreComplete() {
-        loadMoreAdapterDelegate.loadMoreComplete();
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreComplete();
     }
 
     /**
      * Refresh failed
      */
     void loadMoreFail() {
-        loadMoreAdapterDelegate.loadMoreFail();
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreFail();
     }
 
     /**
      * 重置状态
      */
     void reset() {
-        loadMoreAdapterDelegate.reset();
+        if (isEnabledLoadMore()) {
+            loadMoreAdapterDelegate.reset();
+        }
     }
 
     public boolean hasLoadMoreView() {
-        return loadMoreAdapterDelegate.hasLoadMoreView();
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.hasLoadMoreView();
+        return false;
     }
 }
