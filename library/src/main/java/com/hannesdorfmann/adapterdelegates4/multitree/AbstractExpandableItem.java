@@ -45,6 +45,7 @@ public abstract class AbstractExpandableItem<T> implements IDefaultExpand<T>, Pa
      *
      */
     private boolean enabledDefaultExpend;
+    private AbstractExpandableItem<T> parent;
 
     @Override
     public boolean isExpanded() {
@@ -92,6 +93,14 @@ public abstract class AbstractExpandableItem<T> implements IDefaultExpand<T>, Pa
     @Override
     public int spitCount() {
         return 6;
+    }
+
+    public AbstractExpandableItem<T> getParent() {
+        return parent;
+    }
+
+    public void setParent(AbstractExpandableItem<T> parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -172,4 +181,73 @@ public abstract class AbstractExpandableItem<T> implements IDefaultExpand<T>, Pa
         this.enabledDefaultExpend = in.readByte() != 0;
     }
 
+    /**
+     * 递归处理实体层级关系
+     *
+     * @param list
+     * @param treeDepth 路径深度
+     * @author dingpeihua
+     * @date 2019/11/7 19:54
+     * @version 1.0
+     */
+    public static <T extends AbstractExpandableItem> void processExpandableItem(List<T> list, int treeDepth) {
+        processExpandableItem(null, list, treeDepth, null);
+    }
+
+    /**
+     * 递归处理实体层级关系
+     *
+     * @param list
+     * @param treeDepth 路径深度
+     * @author dingpeihua
+     * @date 2019/11/7 19:54
+     * @version 1.0
+     */
+    public static <T extends AbstractExpandableItem> void processExpandableItem(List<T> list, int treeDepth, INodeProcessor action) {
+        processExpandableItem(null, list, treeDepth, action);
+    }
+
+    interface INodeProcessor {
+        <T> void onProcess(AbstractExpandableItem<T> node);
+    }
+
+    /**
+     * 递归处理实体层级关系
+     *
+     * @param list
+     * @param treeDepth 路径深度
+     * @author dingpeihua
+     * @date 2019/11/7 19:54
+     * @version 1.0
+     */
+    public static <T extends AbstractExpandableItem> void processExpandableItem(T parent, List<T> list, int treeDepth, INodeProcessor action) {
+        treeDepth++;
+        if (list != null && list.size() > 0) {
+            for (AbstractExpandableItem expandableItem : list) {
+                expandableItem.setTreeDepth(treeDepth);
+                if (action != null) {
+                    action.onProcess(expandableItem);
+                }
+                if (expandableItem.hasSubItem()) {
+                    expandableItem.setItemType(ITEM_TYPE_PARENT);
+                    processExpandableItem(expandableItem, expandableItem.getSubItems(), treeDepth, action);
+                } else {
+                    expandableItem.setParent(parent);
+                    expandableItem.setItemType(ITEM_TYPE_CHILD);
+                }
+            }
+        }
+    }
+
+    /**
+     * 递归处理实体层级关系
+     *
+     * @param categoryBeans
+     * @author dingpeihua
+     * @date 2019/11/7 19:54
+     * @version 1.0
+     */
+    public static <T extends AbstractExpandableItem> void processExpandableItem(List<T> categoryBeans) {
+        processExpandableItem(categoryBeans, 0);
+    }
 }

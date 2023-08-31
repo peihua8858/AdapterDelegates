@@ -2,9 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 
-androidExtensions {
-    experimental = true
-}
+//androidExtensions {
+//    experimental = true
+//}
 
 android {
     compileSdkVersion rootProject.ext.compileSdk
@@ -60,6 +60,8 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.5.1'
     implementation project(':library')
     implementation project(':paging')
+    implementation "com.google.code.gson:gson:2.8.8"
+
     implementation project(':kotlin-dsl')
     implementation project(':kotlin-dsl-layoutcontainer')
     implementation project(':kotlin-dsl-viewbinding')

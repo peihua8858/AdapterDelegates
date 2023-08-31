@@ -118,7 +118,7 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
     }
 
     public boolean hasLoadMoreView() {
-        if (isEnabledLoadMore()) loadMoreAdapterDelegate.hasLoadMoreView();
+        if (isEnabledLoadMore()) return loadMoreAdapterDelegate.hasLoadMoreView();
         return false;
     }
 }
