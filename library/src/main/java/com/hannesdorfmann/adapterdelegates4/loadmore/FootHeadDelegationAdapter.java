@@ -10,6 +10,7 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegatesManager;
 import com.hannesdorfmann.adapterdelegates4.FootHeadDelegatesManager;
 import com.hannesdorfmann.adapterdelegates4.ListDelegationAdapter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -216,7 +217,7 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
     @Override
     public void addData(@IntRange(from = 0) int position, Object data) {
         if (items == null) {
-            return;
+            items= (T) new ArrayList<>();
         }
         this.items.add(position, data);
         notifyItemInserted(position + headCount());
@@ -230,7 +231,7 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
     @Override
     public <I> void addData(@NonNull I data) {
         if (items == null) {
-            return;
+            items= (T) new ArrayList<>();
         }
         this.items.add(data);
         notifyItemInserted(this.items.size() + headCount());
@@ -247,7 +248,7 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
     @Override
     public void addData(@IntRange(from = 0) int position, Collection newData) {
         if (items == null) {
-            return;
+            items= (T) new ArrayList<>();
         }
         this.items.addAll(position, newData);
         notifyItemRangeInserted(position + headCount(), newData.size());
@@ -257,7 +258,7 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
     @Override
     public void addData(@NonNull Collection newData) {
         if (items == null) {
-            return;
+            items= (T) new ArrayList<>();
         }
         this.items.addAll(newData);
         notifyItemRangeInserted(this.items.size() - newData.size() + headCount(), newData.size());
