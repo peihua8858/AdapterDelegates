@@ -28,6 +28,11 @@ public class AdapterDelegatesManagerTest {
                 return false;
             }
 
+            @Override
+            protected boolean isForViewType(@NonNull Object item, @NonNull List<Object> items, int position) {
+                return false;
+            }
+
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
@@ -43,6 +48,11 @@ public class AdapterDelegatesManagerTest {
         AdapterDelegate d2 = new AdapterDelegate<Object>() {
             @Override
             public boolean isForViewType(@NonNull List<Object> items, int position) {
+                return false;
+            }
+
+            @Override
+            protected boolean isForViewType(@NonNull Object item, @NonNull List<Object> items, int position) {
                 return false;
             }
 

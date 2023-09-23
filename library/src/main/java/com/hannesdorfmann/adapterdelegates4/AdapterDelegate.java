@@ -59,7 +59,9 @@ public abstract class AdapterDelegate<T> {
      * @param position The items position in the dataset (list)
      * @return true if this AdapterDelegate is responsible for that, otherwise false
      */
-    protected abstract boolean isForViewType(@NonNull T item, @NonNull List<T> items, int position);
+    protected boolean isForViewType(@NonNull T item, @NonNull List<T> items, int position){
+        return false;
+    }
 
     public int getItemType() {
         return -1;

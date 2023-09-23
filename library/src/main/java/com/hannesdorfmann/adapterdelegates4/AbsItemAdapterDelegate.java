@@ -39,16 +39,11 @@ import java.util.List;
  * </p>
  * @since 1.2
  */
-public abstract class AbsItemAdapterDelegate<T, VH extends RecyclerView.ViewHolder> extends AdapterDelegate<T> {
+public abstract class AbsItemAdapterDelegate<T, VH extends RecyclerView.ViewHolder> extends AbsAdapterDelegate<T> {
 
     @Override
-    public final boolean isForViewType(@NonNull List<T> items, int position) {
-        return isForViewType(items.get(position), items, position);
-    }
-
-    @Override
-    protected void onBindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
-        onBindViewHolder(item, (VH) holder, payloads);
+    public void onBindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
+        onBindViewHolder(item, (VH) holder,position, payloads);
     }
 
     /**
@@ -78,8 +73,9 @@ public abstract class AbsItemAdapterDelegate<T, VH extends RecyclerView.ViewHold
      *
      * @param item     The data item
      * @param holder   The ViewHolder
+     * @param position   The ViewHolder
      * @param payloads The payloads
      */
-    protected abstract void onBindViewHolder(@NonNull T item, @NonNull VH holder,
-                                             @NonNull List<Object> payloads);
+    protected abstract void onBindViewHolder(@NonNull T item, @NonNull VH holder, int position,
+                                    @NonNull List<Object> payloads);
 }

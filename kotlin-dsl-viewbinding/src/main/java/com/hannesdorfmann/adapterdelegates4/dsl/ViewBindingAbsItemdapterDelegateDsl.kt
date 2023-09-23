@@ -20,7 +20,7 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
  */
 inline fun <reified T, V : ViewBinding> adapterDelegateViewBinding(
     noinline viewBinding: (parent: ViewGroup) -> V,
-     itemType:Int =  -1 ,
+    itemType: Int = -1,
     noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> true },
     noinline block: AdapterDelegateViewBindingViewHolder<T, V>.() -> Unit
 ): AdapterDelegate<T> {
@@ -41,7 +41,7 @@ internal class DslViewBindingAbsItemAdapterDelegate<T, V : ViewBinding>(
     private val initializerBlock: AdapterDelegateViewBindingViewHolder<T, V>.() -> Unit,
 ) : AbsItemAdapterDelegate<T, AdapterDelegateViewBindingViewHolder<T, V>>() {
 
-    override fun isForViewType(item: T  & Any, items: MutableList<T>, position: Int): Boolean = on(
+    override fun isForViewType(item: T & Any, items: MutableList<T>, position: Int): Boolean = on(
         item, items, position
     )
 
@@ -60,7 +60,7 @@ internal class DslViewBindingAbsItemAdapterDelegate<T, V : ViewBinding>(
 
     override fun onBindViewHolder(
         item: T & Any,
-        holder: AdapterDelegateViewBindingViewHolder<T, V>,
+        holder: AdapterDelegateViewBindingViewHolder<T, V>, position: Int,
         payloads: MutableList<Any>
     ) {
         holder._item = item as Any

@@ -112,7 +112,7 @@ internal class AbsDslListAdapterDelegate<T>(
 
     override fun onBindViewHolder(
         item: T & Any,
-        holder: AbsAdapterDelegateViewHolder<T>,
+        holder: AbsAdapterDelegateViewHolder<T>, position:Int,
         payloads: MutableList<Any>
     ) {
         holder._item = item
