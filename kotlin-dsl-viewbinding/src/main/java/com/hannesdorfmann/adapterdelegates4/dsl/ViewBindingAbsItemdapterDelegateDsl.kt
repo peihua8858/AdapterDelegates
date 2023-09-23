@@ -18,11 +18,11 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
  * what to do once the ViewHolder binds to the data by specifying a bind block for
  * @since 4.3.0
  */
-inline fun <reified T, V : ViewBinding> adapterDelegateViewBinding(
-    noinline viewBinding: (parent: ViewGroup) -> V,
+fun <T, V : ViewBinding> adapterDelegateViewBinding(
+    viewBinding: (parent: ViewGroup) -> V,
     itemType: Int = -1,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> true },
-    noinline block: AdapterDelegateViewBindingViewHolder<T, V>.() -> Unit
+    on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> true },
+    block: AdapterDelegateViewBindingViewHolder<T, V>.() -> Unit
 ): AdapterDelegate<T> {
 
     return DslViewBindingAbsItemAdapterDelegate(

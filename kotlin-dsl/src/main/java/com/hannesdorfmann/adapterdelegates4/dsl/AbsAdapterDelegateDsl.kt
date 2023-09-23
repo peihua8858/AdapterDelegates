@@ -49,40 +49,6 @@ inline fun <reified T> adapterDelegate(
 }
 
 /**
- * Simple DSL builder to create an [AdapterDelegate] that is backed by a [List] as dataset.
- *
- * @param layout The android xml layout resource that contains the layout for this adapter delegate.
- * @param on The check that should be run if the AdapterDelegate is for the corresponding Item in the datasource.
- * In other words its the implementation of [AdapterDelegate.isForViewType].
- * @param block The DSL block. Specify here what to do when the ViewHolder gets created. Think of it as some kind of
- * initializer block. For example, you would setup a click listener on a Ui widget in that block followed by specifying
- * what to do once the ViewHolder binds to the data by specifying a bind block for
- * @since 4.1.0
- */
-inline fun <reified T> adapterMutableListDelegate(
-    @LayoutRes layout: Int,
-    itemType: Int = -1,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, items, position -> true },
-    noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
-        LayoutInflater.from(parent.context).inflate(
-            layout,
-            parent,
-            false
-        )
-    },
-    noinline block: AbsAdapterDelegateViewHolder<T>.() -> Unit
-): AdapterDelegate<T> {
-
-    return AbsDslListAdapterDelegate(
-        layout = layout,
-        itemType = itemType,
-        on = on,
-        initializerBlock = block,
-        layoutInflater = layoutInflater
-    )
-}
-
-/**
  * Delegate used internally in combination with [adapterDelegate]
  * @since 4.1.0
  */
