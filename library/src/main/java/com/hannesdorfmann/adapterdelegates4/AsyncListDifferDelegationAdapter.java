@@ -15,43 +15,42 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * An implementation of an Adapter that already uses a {@link AdapterDelegatesManager} pretty same as
- * {@link AbsDelegationAdapter} but also uses {@link AsyncListDiffer} from support library 27.0.1 for
- * calculating diffs between old and new collections of items and does this on background thread.
- * That means that now you should not carry about {@link RecyclerView.Adapter#notifyItemChanged(int)}
- * and other methods of adapter, all you need to do is to submit a new list into adapter and all diffs will be
- * calculated for you.
- * You just have to add the {@link AdapterDelegate}s i.e. in the constructor of a subclass that inheritance from this
- * class:
- * <pre>
- * {@code
- *    class MyAdapter extends AsyncListDifferDelegationAdapter<MyDataSourceType> {
- *        public MyAdapter() {
- *            this.delegatesManager.add(new FooAdapterDelegate())
- *                                 .add(new BarAdapterDelegate());
- *        }
- *    }
+ * 已经使用 {@link AdapterDelegatesManager} 的适配器的实现与以下内容非常相同
+ * {@link AbsDelegationAdapter} 但也使用支持库 27.0.1 中的 {@link AsyncListDiffer}
+ * 计算新旧项目集合之间的差异，并在后台线程上执行此操作。
+ * 这意味着现在你不应该携带 {@link RecyclerView.Adapter#notifyItemChanged(int)}
+ * 和适配器的其他方法一样，您所需要做的就是向适配器提交一个新列表，所有差异都会被
+ * 为您计算。
+ * 你只需添加 {@link AdapterDelegate} 即可，即在继承于此的子类的构造函数中
+ * 班级：
+ * <前>
+ * {@代码
+ * class MyAdapter extends AsyncListDifferDelegationAdapter<MyDataSourceType> {
+ * public MyAdapter（）{
+ * this.delegatesManager.add(new FooAdapterDelegate())
+ * .add(new BarAdapterDelegate());
  * }
- * </pre>
+ * }
+ * }
+ * </前>
  *
- * @param <T> The type of the datasource / items. Internally we will use List&lt;T&gt; but you only have
- *            to provide T (and not List&lt;T&gt;). Its safe to use this with
- *            {@link AbsListItemAdapterDelegate}.
+ * @param <T> 数据源/项目的类型。在内部我们将使用 List<T> 但你只有
+ *            提供 T （而不是 List<T>）。与它一起使用是安全的 {@link AbsListItemAdapterDelegate}。
  * @author Sergey Opivalov
  * @author Hannes Dorfmann
  */
 
 public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
 
-    protected final AdapterDelegatesManager<List<T>> delegatesManager;
+    protected final AdapterDelegatesManager<T> delegatesManager;
     protected final AsyncListDiffer<T> differ;
 
     public AsyncListDifferDelegationAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
-        this(diffCallback, new AdapterDelegatesManager<List<T>>());
+        this(diffCallback, new AdapterDelegatesManager<T>());
     }
 
     public AsyncListDifferDelegationAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback,
-                                            @NonNull AdapterDelegatesManager<List<T>> delegatesManager) {
+                                            @NonNull AdapterDelegatesManager<T> delegatesManager) {
 
         if (diffCallback == null) {
             throw new NullPointerException("ItemCallback is null");
@@ -65,7 +64,7 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
     }
 
     public AsyncListDifferDelegationAdapter(@NonNull AsyncDifferConfig differConfig,
-                                            @NonNull AdapterDelegatesManager<List<T>> delegatesManager) {
+                                            @NonNull AdapterDelegatesManager<T> delegatesManager) {
 
         if (differConfig == null) {
             throw new NullPointerException("AsyncDifferConfig is null");
@@ -86,14 +85,14 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
      * @since 4.2.0
      */
     public AsyncListDifferDelegationAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback,
-                                            @NonNull AdapterDelegate<List<T>>... delegates) {
+                                            @NonNull AdapterDelegate<T>... delegates) {
 
         if (diffCallback == null) {
             throw new NullPointerException("ItemCallback is null");
         }
 
         this.differ = new AsyncListDiffer<T>(this, diffCallback);
-        this.delegatesManager = new AdapterDelegatesManager<List<T>>(delegates);
+        this.delegatesManager = new AdapterDelegatesManager<T>(delegates);
     }
 
 
@@ -104,14 +103,35 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
      * @since 4.2.0
      */
     public AsyncListDifferDelegationAdapter(@NonNull AsyncDifferConfig differConfig,
-                                            @NonNull AdapterDelegate<List<T>>... delegates) {
+                                            @NonNull AdapterDelegate<T>... delegates) {
 
         if (differConfig == null) {
             throw new NullPointerException("AsyncDifferConfig is null");
         }
 
         this.differ = new AsyncListDiffer<T>(new AdapterListUpdateCallback(this), differConfig);
-        this.delegatesManager = new AdapterDelegatesManager<List<T>>(delegates);
+        this.delegatesManager = new AdapterDelegatesManager<T>(delegates);
+    }
+
+    public AsyncListDifferDelegationAdapter<T> addDelegate(@NonNull AdapterDelegate<T>... delegates) {
+        for (AdapterDelegate<T> delegate : delegates) {
+            delegatesManager.addDelegate(delegate);
+        }
+        return this;
+    }
+
+    public AsyncListDifferDelegationAdapter<T> addDelegate(@NonNull AdapterDelegate<T> delegate) {
+        delegatesManager.addDelegate(delegate);
+        return this;
+    }
+
+    public AsyncListDifferDelegationAdapter<T> addDelegate(int viewType, @NonNull AdapterDelegate<T> delegate) {
+        delegatesManager.addDelegate(viewType, delegate);
+        return this;
+    }
+
+    public AdapterDelegate<T> getAdapterDelegate(int viewType) {
+        return delegatesManager.getDelegateForViewType(viewType);
     }
 
     @NonNull
@@ -155,7 +175,7 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
         delegatesManager.onViewDetachedFromWindow(holder);
     }
 
-    public SparseArrayCompat<AdapterDelegate<List<T>>> getDeletes() {
+    public SparseArrayCompat<AdapterDelegate<T>> getDeletes() {
         return delegatesManager.delegates;
     }
 
@@ -203,13 +223,13 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
      */
     @CallSuper
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        SparseArrayCompat<AdapterDelegate<List<T>>> delegates = getDeletes();
+        SparseArrayCompat<AdapterDelegate<T>> delegates = getDeletes();
         if (delegates.isEmpty()) {
             return;
         }
         for (int i = 0; i < delegates.size(); i++) {
             int key = delegates.keyAt(i);
-            AdapterDelegate<List<T>> delegate = delegates.get(key);
+            AdapterDelegate<T> delegate = delegates.get(key);
             if (delegate != null) {
                 delegate.onSaveInstanceState(outState);
             }
@@ -225,13 +245,13 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
      */
     @CallSuper
     public void onRestoreInstanceState(Bundle state) {
-        SparseArrayCompat<AdapterDelegate<List<T>>> delegates = getDeletes();
+        SparseArrayCompat<AdapterDelegate<T>> delegates = getDeletes();
         if (delegates.isEmpty()) {
             return;
         }
         for (int i = 0; i < delegates.size(); i++) {
             int key = delegates.keyAt(i);
-            AdapterDelegate<List<T>> delegate = delegates.get(key);
+            AdapterDelegate<T> delegate = delegates.get(key);
             if (delegate != null) {
                 delegate.onRestoreInstanceState(state);
             }

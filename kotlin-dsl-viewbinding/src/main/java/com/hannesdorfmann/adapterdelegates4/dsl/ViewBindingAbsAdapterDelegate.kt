@@ -31,16 +31,12 @@ abstract class ViewBindingAbsAdapterDelegate<T, VB : ViewBinding> : AbsAdapterDe
         return holder
     }
 
-    final override fun onBindViewHolder(
-        items: MutableList<T>,
+    override fun onBindViewHolder(
+        item: T & Any,
         position: Int,
         holder: RecyclerView.ViewHolder,
         payloads: MutableList<Any>
     ) {
-        onBindViewHolder(items[position], position, holder as AbsDelegateViewHolder<VB>)
-    }
-
-    override fun onBindViewHolder(item: T, position: Int, holder: RecyclerView.ViewHolder) {
         onBindViewHolder(item, position, holder as AbsDelegateViewHolder<VB>)
     }
 

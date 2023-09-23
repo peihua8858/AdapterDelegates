@@ -22,9 +22,9 @@ public class AdapterDelegatesManagerTest {
     @Test
     public void addRemove() {
 
-        AdapterDelegate d1 = new AdapterDelegate() {
+        AdapterDelegate d1 = new AdapterDelegate<Object>() {
             @Override
-            public boolean isForViewType(@NonNull Object items, int position) {
+            public boolean isForViewType(@NonNull List<Object> items, int position) {
                 return false;
             }
 
@@ -40,9 +40,9 @@ public class AdapterDelegatesManagerTest {
             }
         };
 
-        AdapterDelegate d2 = new AdapterDelegate() {
+        AdapterDelegate d2 = new AdapterDelegate<Object>() {
             @Override
-            public boolean isForViewType(@NonNull Object items, int position) {
+            public boolean isForViewType(@NonNull List<Object> items, int position) {
                 return false;
             }
 
@@ -99,11 +99,11 @@ public class AdapterDelegatesManagerTest {
 
         // 3 elements and each element has it's own viewtype and hence own delegate
         List<Object> items = Arrays.asList(new Object(), new Object(), new Object());
-        SpyableAdapterDelegate<List<Object>> d0 = new SpyableAdapterDelegate<>(0);
-        SpyableAdapterDelegate<List<Object>> d1 = new SpyableAdapterDelegate<>(1);
-        SpyableAdapterDelegate<List<Object>> d2 = new SpyableAdapterDelegate<>(2);
+        SpyableAdapterDelegate<Object> d0 = new SpyableAdapterDelegate<>(0);
+        SpyableAdapterDelegate<Object> d1 = new SpyableAdapterDelegate<>(1);
+        SpyableAdapterDelegate<Object> d2 = new SpyableAdapterDelegate<>(2);
 
-        AdapterDelegatesManager<List<Object>> manager = new AdapterDelegatesManager<>();
+        AdapterDelegatesManager<Object> manager = new AdapterDelegatesManager<>();
         manager.addDelegate(d0);
         manager.addDelegate(d1);
         manager.addDelegate(d2);
@@ -378,21 +378,21 @@ public class AdapterDelegatesManagerTest {
 
         // 3 elements and each element has it's own viewtype and hence own delegate
         List<Object> items = Arrays.asList(new Object(), new Object(), new Object());
-        SpyableAdapterDelegate<List<Object>> d0 = new SpyableAdapterDelegate<>(0);
-        SpyableAdapterDelegate<List<Object>> d1 = new SpyableAdapterDelegate<>(1);
-        SpyableAdapterDelegate<List<Object>> d2 = new SpyableAdapterDelegate<>(2);
+        SpyableAdapterDelegate<Object> d0 = new SpyableAdapterDelegate<>(0);
+        SpyableAdapterDelegate<Object> d1 = new SpyableAdapterDelegate<>(1);
+        SpyableAdapterDelegate<Object> d2 = new SpyableAdapterDelegate<>(2);
 
-        AdapterDelegatesManager<List<Object>> manager = new AdapterDelegatesManager<>();
+        AdapterDelegatesManager<Object> manager = new AdapterDelegatesManager<>();
         manager.addDelegate(d0);
         manager.addDelegate(d1);
         manager.addDelegate(d2);
 
-        SpyableAdapterDelegate<List<Object>>[] delegates = new SpyableAdapterDelegate[]{
+        SpyableAdapterDelegate<Object>[] delegates = new SpyableAdapterDelegate[]{
                 d0, d1, d2
         };
 
         for (int i = 0; i < items.size(); i++) {
-            SpyableAdapterDelegate<List<Object>> expectedDelegate = delegates[i];
+            SpyableAdapterDelegate<Object> expectedDelegate = delegates[i];
 
             int viewType = manager.getItemViewType(items, i);
 

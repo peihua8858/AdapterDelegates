@@ -19,7 +19,7 @@ import java.util.List;
  * @version 1.0
  * @date 2023/3/6 10:21
  */
-public class LoadMoreDelegationAdapter<T extends List> extends FootHeadDelegationAdapter<T> {
+public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
     protected final LoadMoreDelegatesManager loadMoreDelegatesManager;
 
     protected RecyclerView recyclerView = null;
@@ -127,13 +127,13 @@ public class LoadMoreDelegationAdapter<T extends List> extends FootHeadDelegatio
     }
 
     @Override
-    public void setItems(@Nullable T items) {
+    public void setItems(@Nullable List<T> items) {
         reset();
         super.setItems(items);
     }
 
     @Override
-    public T getItems(int position) {
+    public List<T> getItems(int position) {
         if (isLoadMoreData(position)) {
             return null;
         }
@@ -145,7 +145,7 @@ public class LoadMoreDelegationAdapter<T extends List> extends FootHeadDelegatio
         if (loadMoreDelegatesManager.hasLoadMoreView() && isLoadMoreData(position)) {
             return LoadMoreDelegatesManager.LOAD_MORE_ITEM_VIEW_TYPE;
         }
-        return delegatesManager.getItemViewType(getItems(position), getRealPosition(position));
+        return delegatesManager.getItemViewType(items, getRealPosition(position));
     }
 
     public void setEnableLoadMore(boolean isEnableLoadMore) {

@@ -64,7 +64,7 @@ public class AsyncListDifferDelegationAdapterTest {
     @Ignore("Why does Mockito can't mock the final class anymore?")
     public void checkDelegatesManagerInstance() {
 
-        final AdapterDelegatesManager<List<Object>> manager = new AdapterDelegatesManager<>();
+        final AdapterDelegatesManager<Object> manager = new AdapterDelegatesManager<>();
         AsyncDifferConfig<Object> config = Mockito.mock(AsyncDifferConfig.class);
         AsyncListDifferDelegationAdapter<Object> adapter = new AsyncListDifferDelegationAdapter<Object>(config, manager) {
             @Override
@@ -82,11 +82,11 @@ public class AsyncListDifferDelegationAdapterTest {
     @Ignore("Why does Mockito can't mock the final class anymore?")
     public void callAllMethods() {
 
-        final SpyableAdapterDelegate<List<Object>> delegate1 = new SpyableAdapterDelegate<>(0);
-        final SpyableAdapterDelegate<List<Object>> delegate2 = new SpyableAdapterDelegate<>(1);
+        final SpyableAdapterDelegate<Object> delegate1 = new SpyableAdapterDelegate<>(0);
+        final SpyableAdapterDelegate<Object> delegate2 = new SpyableAdapterDelegate<>(1);
 
-        final AdapterDelegatesManager<List<Object>> manager =
-                new AdapterDelegatesManager<List<Object>>()
+        final AdapterDelegatesManager<Object> manager =
+                new AdapterDelegatesManager<Object>()
                         .addDelegate(delegate1)
                         .addDelegate(delegate2);
 

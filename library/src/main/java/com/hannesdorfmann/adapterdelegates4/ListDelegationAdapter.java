@@ -16,12 +16,14 @@
 
 package com.hannesdorfmann.adapterdelegates4;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.AsyncListDiffer;
 
 /**
  * An adapter implementation designed for items organized in a {@link List}. This adapter
@@ -42,14 +44,16 @@ import androidx.annotation.Nullable;
  * @param <T> The type of the items. Must be something that extends from List like List<Foo>
  * @author Hannes Dorfmann
  */
-public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<T> {
-
+public class ListDelegationAdapter<T> extends AbsDelegationAdapter<T> {
+    protected final AsyncListDiffer<T> differ;
     public ListDelegationAdapter() {
         super();
+        this.differ = new AsyncListDiffer<T>(this, null);
     }
 
     public ListDelegationAdapter(@NonNull AdapterDelegatesManager<T> delegatesManager) {
         super(delegatesManager);
+        this.differ = new AsyncListDiffer<T>(this, null);
     }
 
     /**
@@ -60,6 +64,7 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
      */
     public ListDelegationAdapter(@NonNull AdapterDelegate<T>... delegates) {
         super(delegates);
+        this.differ = new AsyncListDiffer<T>(this, null);
     }
 
     @Override
@@ -164,8 +169,12 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
     }
 
     @Override
-    public void setItems(@Nullable T items) {
-        super.setItems(items);
+    public void setItems(@Nullable List<T> items) {
+        if (items != null) {
+            super.setItems(new ArrayList(items));
+        }else{
+            super.setItems(new ArrayList<>());
+        }
         notifyDataSetChanged();
     }
 
@@ -197,7 +206,7 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
      *
      * @param position
      */
-    public void addData(@IntRange(from = 0) int position, Object data) {
+    public void addData(@IntRange(from = 0) int position, T data) {
         if (items == null) {
             return;
         }
@@ -210,7 +219,7 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
      * add one new data
      * 添加一条新数据
      */
-    public <I> void addData(@NonNull I data) {
+    public void addData(@NonNull T data) {
         if (items == null) {
             return;
         }
@@ -262,7 +271,7 @@ public class ListDelegationAdapter<T extends List> extends AbsDelegationAdapter<
         return items != null ? this.items.size() : 0;
     }
 
-    public void addItems(T items) {
+    public void addItems(List<T> items) {
         if (items != null && !items.isEmpty()) {
             if (this.items == null || this.items.isEmpty()) {
                 setItems(items);

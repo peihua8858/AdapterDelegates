@@ -31,10 +31,10 @@ public class AbsListItemAdapterDelegateTest {
         Assert.assertTrue(delegate.isForViewTypeCalled);
 
         ViewGroup parent = Mockito.mock(ViewGroup.class);
-        CatViewHolder vh = delegate.onCreateViewHolder(parent);
+        CatViewHolder vh = (CatViewHolder) delegate.createViewHolder(parent);
         Assert.assertTrue(delegate.onCreateViewHolderCalled);
 
-        delegate.onBindViewHolder(items, 0, vh, new ArrayList<Object>());
+        delegate.bindViewHolder(items, 0, vh, new ArrayList<Object>());
         Assert.assertTrue(delegate.onBindViewHolderCalled);
 
 

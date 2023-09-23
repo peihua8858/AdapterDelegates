@@ -35,7 +35,7 @@ inline fun <reified I : T, T> adapterDelegateViewContainer(
     noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
     noinline createView: (parent: ViewGroup) -> View ,
     noinline block: AdapterDelegateViewContainerViewHolder<I>.() -> Unit
-): AdapterDelegate<List<T>> {
+): AdapterDelegate<T> {
 
     return DslViewContainerListAdapterDelegate(
         itemType = itemType,
@@ -50,7 +50,7 @@ inline fun <reified I : T, T> adapterMutableListDelegateViewContainer(
     noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
     noinline createView: (parent: ViewGroup) -> View,
     noinline block: AdapterDelegateViewContainerViewHolder<I>.() -> Unit
-): AdapterDelegate<MutableList<T>> {
+): AdapterDelegate<T> {
 
     return DslViewContainerListAdapterDelegate(
         itemType = itemType,
@@ -68,7 +68,7 @@ internal class DslViewContainerListAdapterDelegate<I : T, T>(
     private val createView: (parent: ViewGroup) -> View
 ) : AbsListItemAdapterDelegate<I, T, AdapterDelegateViewContainerViewHolder<I>>() {
 
-    override fun isForViewType(item: T, items: MutableList<T>, position: Int): Boolean = on(
+    override fun isForViewType(item: T & Any, items: MutableList<T>, position: Int): Boolean = on(
         item, items, position
     )
 
@@ -82,7 +82,7 @@ internal class DslViewContainerListAdapterDelegate<I : T, T>(
     }
 
     override fun onBindViewHolder(
-        item: I,
+        item: I & Any,
         holder: AdapterDelegateViewContainerViewHolder<I>,
         payloads: MutableList<Any>
     ) {

@@ -21,9 +21,9 @@ import java.util.List;
  * @version 1.0
  * @date 2023/3/6 10:21
  */
-public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAdapter<T> {
-    protected T headData;
-    protected T footData;
+public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
+    protected List<T> headData;
+    protected List<T> footData;
     protected final FootHeadDelegatesManager footHeadDelegatesManager;
 
     public FootHeadDelegationAdapter() {
@@ -38,11 +38,11 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
         footHeadDelegatesManager = (FootHeadDelegatesManager) delegatesManager;
     }
 
-    public void setHeadData(T headData) {
+    public void setHeadData(List<T> headData) {
         this.headData = headData;
     }
 
-    public void setFootData(T footData) {
+    public void setFootData(List<T> footData) {
         this.footData = footData;
     }
 
@@ -136,7 +136,7 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
     }
 
     @Override
-    public void setItems(@Nullable T items) {
+    public void setItems(@Nullable List<T> items) {
         super.setItems(items);
     }
 
@@ -169,8 +169,8 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
         return position - headCount();
     }
 
-    public T getItems(int position) {
-        T items = this.items;
+    public List<T> getItems(int position) {
+        List<T> items = this.items;
         if (isHeadData(position)) {
             items = headData;
         } else if (isFootData(position)) {
@@ -215,9 +215,9 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
      * @param position
      */
     @Override
-    public void addData(@IntRange(from = 0) int position, Object data) {
+    public void addData(@IntRange(from = 0) int position, T data) {
         if (items == null) {
-            items= (T) new ArrayList<>();
+            items= new ArrayList<>();
         }
         this.items.add(position, data);
         notifyItemInserted(position + headCount());
@@ -229,9 +229,9 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
      * 添加一条新数据
      */
     @Override
-    public <I> void addData(@NonNull I data) {
+    public void addData(@NonNull T data) {
         if (items == null) {
-            items= (T) new ArrayList<>();
+            items= new ArrayList<>();
         }
         this.items.add(data);
         notifyItemInserted(this.items.size() + headCount());
@@ -248,7 +248,7 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
     @Override
     public void addData(@IntRange(from = 0) int position, Collection newData) {
         if (items == null) {
-            items= (T) new ArrayList<>();
+            items= new ArrayList<>();
         }
         this.items.addAll(position, newData);
         notifyItemRangeInserted(position + headCount(), newData.size());
@@ -258,7 +258,7 @@ public class FootHeadDelegationAdapter<T extends List> extends ListDelegationAda
     @Override
     public void addData(@NonNull Collection newData) {
         if (items == null) {
-            items= (T) new ArrayList<>();
+            items= new ArrayList<>();
         }
         this.items.addAll(newData);
         notifyItemRangeInserted(this.items.size() - newData.size() + headCount(), newData.size());

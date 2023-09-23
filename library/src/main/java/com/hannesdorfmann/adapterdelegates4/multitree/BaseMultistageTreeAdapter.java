@@ -19,7 +19,7 @@ import java.util.List;
  * @version 1.0
  * @date 2019/11/7 15:26
  */
-public abstract class BaseMultistageTreeAdapter<T> extends LoadMoreDelegationAdapter<List<T>> {
+public abstract class BaseMultistageTreeAdapter<T> extends LoadMoreDelegationAdapter<T> {
     /**
      * Collapse an expandable item that has been expanded..
      *

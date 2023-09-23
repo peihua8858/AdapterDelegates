@@ -57,7 +57,7 @@ public class SpyableAdapterDelegate<T> extends AdapterDelegate<T> {
     }
 
     @Override
-    public boolean isForViewType(@NonNull T items, int position) {
+    public boolean isForViewType(@NonNull List<T> items, int position) {
 
         boolean isForThat = position == viewType;
         if (isForThat) {

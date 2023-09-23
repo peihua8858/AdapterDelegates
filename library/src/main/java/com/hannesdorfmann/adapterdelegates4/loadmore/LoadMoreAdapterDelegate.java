@@ -75,12 +75,7 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
     }
 
     @Override
-    public final void onBindViewHolder(List<T> items, int position, RecyclerView.ViewHolder holder, List<Object> payloads) {
-        convert(holder, position);
-    }
-
-    @Override
-    public final void onBindViewHolder(T item, int position, RecyclerView.ViewHolder holder) {
+    public final void onBindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
         convert(holder, position);
     }
 

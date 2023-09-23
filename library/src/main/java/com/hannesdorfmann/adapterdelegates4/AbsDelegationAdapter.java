@@ -63,7 +63,7 @@ public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
 
     protected AdapterDelegatesManager<T> delegatesManager;
     @Nullable
-    protected T items;
+    protected List<T> items;
 
     public AbsDelegationAdapter() {
         this(new AdapterDelegatesManager<T>());
@@ -138,7 +138,7 @@ public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
      * @return The items / data source
      */
     @Nullable
-    public T getItems() {
+    public List<T> getItems() {
         return items;
     }
 
@@ -147,7 +147,7 @@ public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
      *
      * @param items The items / data source
      */
-    public void setItems(@Nullable T items) {
+    public void setItems(@Nullable List<T> items) {
         this.items = items;
     }
 

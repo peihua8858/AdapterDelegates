@@ -71,7 +71,7 @@ public class AdapterDelegatesManager<T> {
     /**
      * Map for ViewType to AdapterDelegate
      */
-    protected SparseArrayCompat<AdapterDelegate<T>> delegates = new SparseArrayCompat();
+    protected SparseArrayCompat<AdapterDelegate<T>> delegates = new SparseArrayCompat<>();
     protected AdapterDelegate<T> fallbackDelegate;
 
     /**
@@ -229,7 +229,7 @@ public class AdapterDelegatesManager<T> {
      *                              ViewType)
      * @throws NullPointerException if items is null
      */
-    public int getItemViewType(@NonNull T items, int position) {
+    public int getItemViewType(@NonNull List<T> items, int position) {
 
         if (items == null) {
             throw new NullPointerException("Items datasource is null!");
@@ -278,7 +278,7 @@ public class AdapterDelegatesManager<T> {
             throw new NullPointerException("No AdapterDelegate added for ViewType " + viewType);
         }
 
-        RecyclerView.ViewHolder vh = delegate.onCreateViewHolder(parent);
+        RecyclerView.ViewHolder vh = delegate.createViewHolder(parent);
         if (vh == null) {
             throw new NullPointerException("ViewHolder returned from AdapterDelegate "
                     + delegate
@@ -287,6 +287,31 @@ public class AdapterDelegatesManager<T> {
                     + " is null!");
         }
         return vh;
+    }
+
+    /**
+     * Must be called from{@link RecyclerView.Adapter#onBindViewHolder(RecyclerView.ViewHolder, int,
+     * List)}
+     *
+     * @param items    Adapter's data source
+     * @param position the position in data source
+     * @param holder   the ViewHolder to bind
+     * @param payloads A non-null list of merged payloads. Can be empty list if requires full update.
+     * @throws NullPointerException if no AdapterDelegate has been registered for ViewHolders
+     *                              viewType
+     */
+    public void onBindViewHolder(@NonNull List<T> items, int position,
+                                 @NonNull RecyclerView.ViewHolder holder, List payloads) {
+
+        AdapterDelegate<T> delegate = getDelegateForViewType(holder.getItemViewType());
+        if (delegate == null) {
+            throw new NullPointerException("No delegate found for item at position = "
+                    + position
+                    + " for viewType = "
+                    + holder.getItemViewType());
+        }
+        delegate.bindViewHolder(items, position, holder,
+                payloads != null ? payloads : PAYLOADS_EMPTY_LIST);
     }
 
     /**

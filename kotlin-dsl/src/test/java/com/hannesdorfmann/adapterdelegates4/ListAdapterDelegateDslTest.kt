@@ -57,7 +57,7 @@ class ListAdapterDelegateDslTest {
         }
 
         // Assert init block is called
-        delegate.onCreateViewHolder(viewGroup)
+        delegate.createViewHolder(viewGroup)
         Assert.assertEquals(1, initCalled)
         Assert.assertNotNull(viewHolder)
 
@@ -140,7 +140,7 @@ class ListAdapterDelegateDslTest {
 
                 bind { }
             }
-            delegate.onCreateViewHolder(viewGroup)
+            delegate.createViewHolder(viewGroup)
             Assert.fail("Exception expected")
         } catch (e: IllegalStateException) {
             val expectedMsg = "bind { ... } is already defined. Only one bind { ... } is allowed."
@@ -163,7 +163,7 @@ class ListAdapterDelegateDslTest {
             }
         }
 
-        delegate.onCreateViewHolder(viewGroup)
+        delegate.createViewHolder(viewGroup)
         Assert.assertNotNull(viewHolder)
         delegate.onViewRecycled(viewHolder!!)
         Assert.assertEquals(1, called)
@@ -183,7 +183,7 @@ class ListAdapterDelegateDslTest {
 
                 onViewRecycled { }
             }
-            delegate.onCreateViewHolder(viewGroup)
+            delegate.createViewHolder(viewGroup)
             Assert.fail("Exception expected")
         } catch (e: IllegalStateException) {
             val expectedMsg =
@@ -208,7 +208,7 @@ class ListAdapterDelegateDslTest {
             }
         }
 
-        delegate.onCreateViewHolder(viewGroup)
+        delegate.createViewHolder(viewGroup)
         Assert.assertNotNull(viewHolder)
         val ret = delegate.onFailedToRecycleView(viewHolder!!)
         Assert.assertEquals(1, called)
@@ -229,7 +229,7 @@ class ListAdapterDelegateDslTest {
 
                 onFailedToRecycleView { false }
             }
-            delegate.onCreateViewHolder(viewGroup)
+            delegate.createViewHolder(viewGroup)
             Assert.fail("Exception expected")
         } catch (e: IllegalStateException) {
             val expectedMsg =
@@ -253,7 +253,7 @@ class ListAdapterDelegateDslTest {
             }
         }
 
-        delegate.onCreateViewHolder(viewGroup)
+        delegate.createViewHolder(viewGroup)
         Assert.assertNotNull(viewHolder)
         delegate.onViewAttachedToWindow(viewHolder!!)
         Assert.assertEquals(1, called)
@@ -273,7 +273,7 @@ class ListAdapterDelegateDslTest {
 
                 onViewAttachedToWindow { }
             }
-            delegate.onCreateViewHolder(viewGroup)
+            delegate.createViewHolder(viewGroup)
             Assert.fail("Exception expected")
         } catch (e: IllegalStateException) {
             val expectedMsg =
@@ -297,7 +297,7 @@ class ListAdapterDelegateDslTest {
             }
         }
 
-        delegate.onCreateViewHolder(viewGroup)
+        delegate.createViewHolder(viewGroup)
         Assert.assertNotNull(viewHolder)
         delegate.onViewDetachedFromWindow(viewHolder!!)
         Assert.assertEquals(1, called)
@@ -317,7 +317,7 @@ class ListAdapterDelegateDslTest {
 
                 onViewDetachedFromWindow { }
             }
-            delegate.onCreateViewHolder(viewGroup)
+            delegate.createViewHolder(viewGroup)
             Assert.fail("Exception expected")
         } catch (e: IllegalStateException) {
             val expectedMsg =

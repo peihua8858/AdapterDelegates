@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.collection.SparseArrayCompat;
 
+import java.util.List;
+
 /**
  * 加载更多委托管理器
  *
@@ -123,7 +125,7 @@ public class FootHeadDelegatesManager<T> extends AdapterDelegatesManager<T> {
     }
 
     @Override
-    public int getItemViewType(@NonNull T items, int position) {
+    public int getItemViewType(@NonNull List<T> items, int position) {
         if (items == null) {
             throw new NullPointerException("Items datasource is null!");
         }
@@ -134,7 +136,7 @@ public class FootHeadDelegatesManager<T> extends AdapterDelegatesManager<T> {
         return super.getItemViewType(items, position);
     }
 
-    public Integer getFootHeadItemViewType(@NonNull T items, int position) {
+    public Integer getFootHeadItemViewType(@NonNull List<T> items, int position) {
         int delegatesCount = headerDelegates.size();
         for (int i = 0; i < delegatesCount; i++) {
             AdapterDelegate<T> delegate = headerDelegates.valueAt(i);

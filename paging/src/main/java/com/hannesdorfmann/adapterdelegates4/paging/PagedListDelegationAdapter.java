@@ -22,25 +22,25 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class PagedListDelegationAdapter<T> extends PagedListAdapter<T, RecyclerView.ViewHolder> {
 
-    protected final AdapterDelegatesManager<List<T>> delegatesManager;
+    protected final AdapterDelegatesManager<T> delegatesManager;
 
     /**
      * @param diffCallback The Callback
      * @param delegates    The {@link AdapterDelegate}s that should be added
      * @since 4.1.0
      */
-    public PagedListDelegationAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback, AdapterDelegate<List<T>>... delegates) {
-        this(new AdapterDelegatesManager<List<T>>(), diffCallback);
+    public PagedListDelegationAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback, AdapterDelegate<T>... delegates) {
+        this(new AdapterDelegatesManager<T>(), diffCallback);
         for (int i = 0; i < delegates.length; i++) {
             delegatesManager.addDelegate(delegates[i]);
         }
     }
 
     public PagedListDelegationAdapter(@NonNull DiffUtil.ItemCallback<T> diffCallback) {
-        this(new AdapterDelegatesManager<List<T>>(), diffCallback);
+        this(new AdapterDelegatesManager<T>(), diffCallback);
     }
 
-    public PagedListDelegationAdapter(@NonNull AdapterDelegatesManager<List<T>> delegatesManager,
+    public PagedListDelegationAdapter(@NonNull AdapterDelegatesManager<T> delegatesManager,
                                       @NonNull DiffUtil.ItemCallback<T> diffCallback) {
         super(diffCallback);
         if (diffCallback == null) {
@@ -54,10 +54,10 @@ public class PagedListDelegationAdapter<T> extends PagedListAdapter<T, RecyclerV
     }
 
     public PagedListDelegationAdapter(@NonNull AsyncDifferConfig<T> config) {
-        this(new AdapterDelegatesManager<List<T>>(), config);
+        this(new AdapterDelegatesManager<T>(), config);
     }
 
-    public PagedListDelegationAdapter(@NonNull AdapterDelegatesManager<List<T>> delegatesManager,
+    public PagedListDelegationAdapter(@NonNull AdapterDelegatesManager<T> delegatesManager,
                                       @NonNull AsyncDifferConfig<T> config) {
         super(config);
         if (config == null) {
@@ -68,7 +68,26 @@ public class PagedListDelegationAdapter<T> extends PagedListAdapter<T, RecyclerV
         }
         this.delegatesManager = delegatesManager;
     }
+    public PagedListDelegationAdapter<T> addDelegate(@NonNull AdapterDelegate<T>... delegates) {
+        for (AdapterDelegate<T> delegate : delegates) {
+            delegatesManager.addDelegate(delegate);
+        }
+        return this;
+    }
 
+    public PagedListDelegationAdapter<T> addDelegate(@NonNull AdapterDelegate<T> delegate) {
+        delegatesManager.addDelegate(delegate);
+        return this;
+    }
+
+    public PagedListDelegationAdapter<T> addDelegate(int viewType, @NonNull AdapterDelegate<T> delegate) {
+        delegatesManager.addDelegate(viewType, delegate);
+        return this;
+    }
+
+    public AdapterDelegate<T> getAdapterDelegate(int viewType) {
+        return delegatesManager.getDelegateForViewType(viewType);
+    }
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

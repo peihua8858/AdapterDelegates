@@ -21,7 +21,7 @@ import com.hannesdorfmann.adapterdelegates4.loadmore.LoadMoreDelegationAdapter
  * @version 1.0
  * @date 2019/3/4 11:53
  */
-open class LoadMoreHelper<T, ADAPTER : ListDelegationAdapter<List<T>>>(
+open class LoadMoreHelper<T, ADAPTER : ListDelegationAdapter<T>>(
     private val rootView: View,
     private val mAdapter: ADAPTER,
     private val helperListener: OnLoadMoreHelperListener,

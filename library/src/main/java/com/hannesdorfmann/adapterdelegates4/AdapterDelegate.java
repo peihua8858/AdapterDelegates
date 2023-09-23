@@ -45,7 +45,21 @@ public abstract class AdapterDelegate<T> {
      * @param position The position in the datasource
      * @return true, if this item is responsible,  otherwise false
      */
-    public abstract boolean isForViewType(@NonNull T items, int position);
+    public boolean isForViewType(@NonNull List<T> items, int position) {
+        return isForViewType(items.get(position), items, position);
+    }
+
+    /**
+     * Called to determine whether this AdapterDelegate is the responsible for the given item in the
+     * list or not
+     * element
+     *
+     * @param item     The item from the list at the given position
+     * @param items    The items from adapters dataset
+     * @param position The items position in the dataset (list)
+     * @return true if this AdapterDelegate is responsible for that, otherwise false
+     */
+    protected abstract boolean isForViewType(@NonNull T item, @NonNull List<T> items, int position);
 
     public int getItemType() {
         return -1;
@@ -73,13 +87,24 @@ public abstract class AdapterDelegate<T> {
     /**
      * Called to bind the {@link RecyclerView.ViewHolder} to the item of the datas source set
      *
-     * @param items    The data source
+     * @param item     The data source
      * @param position The position in the datasource
      * @param holder   The {@link RecyclerView.ViewHolder} to bind
      * @param payloads A non-null list of merged payloads. Can be empty list if requires full update.
      */
-    protected abstract void onBindViewHolder(@NonNull T items, int position,
+    protected abstract void onBindViewHolder(@NonNull T item, int position,
                                              @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads);
+
+    /**
+     * Called to bind the {@link RecyclerView.ViewHolder} to the item of the datas source set
+     *
+     * @param item     The data source
+     * @param position The position in the datasource
+     * @param holder   The {@link RecyclerView.ViewHolder} to bind
+     */
+    public void bindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
+        onBindViewHolder(item, position, holder, payloads);
+    }
 
     /**
      * Called to bind the {@link RecyclerView.ViewHolder} to the item of the datas source set
@@ -88,8 +113,8 @@ public abstract class AdapterDelegate<T> {
      * @param position The position in the datasource
      * @param holder   The {@link RecyclerView.ViewHolder} to bind
      */
-    public void bindViewHolder(@NonNull T items, int position, @NonNull RecyclerView.ViewHolder holder) {
-        onBindViewHolder(items, position, holder, new ArrayList<>());
+    public void bindViewHolder(@NonNull List<T> items, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
+        bindViewHolder(items.get(position), position, holder, payloads);
     }
 
     /**

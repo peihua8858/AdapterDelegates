@@ -44,7 +44,7 @@ inline fun <reified I : T, T> adapterDelegateLayoutContainer(
         )
     },
     noinline block: AdapterDelegateLayoutContainerViewHolder<I>.() -> Unit
-): AdapterDelegate<List<T>> {
+): AdapterDelegate<T> {
 
     return DslLayoutContainerListAdapterDelegate(
         layout = layout,
@@ -67,7 +67,7 @@ inline fun <reified I : T, T> adapterMutableListDelegateLayoutContainer(
         )
     },
     noinline block: AdapterDelegateLayoutContainerViewHolder<I>.() -> Unit
-): AdapterDelegate<MutableList<T>> {
+): AdapterDelegate<T> {
 
     return DslLayoutContainerListAdapterDelegate(
         layout = layout,
@@ -87,7 +87,7 @@ internal class DslLayoutContainerListAdapterDelegate<I : T, T>(
     private val layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View
 ) : AbsListItemAdapterDelegate<I, T, AdapterDelegateLayoutContainerViewHolder<I>>() {
 
-    override fun isForViewType(item: T, items: MutableList<T>, position: Int): Boolean = on(
+    override fun isForViewType(item: T & Any, items: MutableList<T>, position: Int): Boolean = on(
         item, items, position
     )
 
@@ -103,11 +103,11 @@ internal class DslLayoutContainerListAdapterDelegate<I : T, T>(
     }
 
     override fun onBindViewHolder(
-        item: I,
+        item: I & Any,
         holder: AdapterDelegateLayoutContainerViewHolder<I>,
         payloads: MutableList<Any>
     ) {
-        holder._item = item as Any
+        holder._item = item
         holder._bind?.invoke(payloads) // It's ok to have an AdapterDelegate without binding block (i.e. static content)
     }
 

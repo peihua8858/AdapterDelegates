@@ -2,10 +2,10 @@ package com.hannesdorfmann.adapterdelegates4;
 
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 /**
  * A simplified {@link AdapterDelegate} when the underlying adapter's dataset is a  {@linkplain
@@ -39,8 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * </p>
  * @since 1.2
  */
-public abstract class AbsListItemAdapterDelegate<I extends T, T, VH extends RecyclerView.ViewHolder>
-        extends AdapterDelegate<T> {
+public abstract class AbsItemAdapterDelegate<T, VH extends RecyclerView.ViewHolder> extends AdapterDelegate<T> {
 
     @Override
     public final boolean isForViewType(@NonNull List<T> items, int position) {
@@ -49,7 +48,7 @@ public abstract class AbsListItemAdapterDelegate<I extends T, T, VH extends Recy
 
     @Override
     protected void onBindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
-        onBindViewHolder((I) item, (VH) holder, payloads);
+        onBindViewHolder(item, (VH) holder, payloads);
     }
 
     /**
@@ -81,6 +80,6 @@ public abstract class AbsListItemAdapterDelegate<I extends T, T, VH extends Recy
      * @param holder   The ViewHolder
      * @param payloads The payloads
      */
-    protected abstract void onBindViewHolder(@NonNull I item, @NonNull VH holder,
+    protected abstract void onBindViewHolder(@NonNull T item, @NonNull VH holder,
                                              @NonNull List<Object> payloads);
 }

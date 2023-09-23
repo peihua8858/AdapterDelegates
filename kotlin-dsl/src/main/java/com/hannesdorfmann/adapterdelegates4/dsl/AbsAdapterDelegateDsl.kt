@@ -3,82 +3,99 @@ package com.hannesdorfmann.adapterdelegates4.dsl
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
-import com.hannesdorfmann.adapterdelegates4.AbsListItemAdapterDelegate
+import com.fz.common.view.utils.getItemView
+import com.hannesdorfmann.adapterdelegates4.AbsItemAdapterDelegate
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 
 /**
  * Simple DSL builder to create an [AdapterDelegate] that is backed by a [List] as dataset.
- * This DSL builds on top of [ViewBinding] so that no findViewById is needed anymore.
  *
- * @param viewBinding return a [ViewBinding] for this adapter delegate.
+ * @param layout The android xml layout resource that contains the layout for this adapter delegate.
  * @param on The check that should be run if the AdapterDelegate is for the corresponding Item in the datasource.
  * In other words its the implementation of [AdapterDelegate.isForViewType].
  * @param block The DSL block. Specify here what to do when the ViewHolder gets created. Think of it as some kind of
  * initializer block. For example, you would setup a click listener on a Ui widget in that block followed by specifying
  * what to do once the ViewHolder binds to the data by specifying a bind block for
- * @since 4.3.0
+ * @since 4.1.0
  */
-inline fun <reified I : T, T, V : ViewBinding> adapterDelegateViewBinding(
-    noinline viewBinding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,
-     itemType:Int =  -1 ,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
-    noinline block: AdapterDelegateViewBindingViewHolder<I, V>.() -> Unit
+inline fun <reified T> adapterDelegate(
+    @LayoutRes layout: Int,
+    itemType: Int = -1,
+    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, items, position -> true },
+    noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
+        parent.getItemView(layout)
+    },
+    noinline block: AbsAdapterDelegateViewHolder<T>.() -> Unit
 ): AdapterDelegate<T> {
 
-    return DslViewBindingListAdapterDelegate(
-        binding = viewBinding,
-        on = on,
+    return AbsDslListAdapterDelegate(
+        layout = layout,
         itemType = itemType,
+        on = on,
         initializerBlock = block,
+        layoutInflater = layoutInflater
     )
 }
 
 /**
  * Simple DSL builder to create an [AdapterDelegate] that is backed by a [List] as dataset.
- * This DSL builds on top of [ViewBinding] so that no findViewById is needed anymore.
  *
- * @param viewBinding return a [ViewBinding] for this adapter delegate.
+ * @param layout The android xml layout resource that contains the layout for this adapter delegate.
  * @param on The check that should be run if the AdapterDelegate is for the corresponding Item in the datasource.
  * In other words its the implementation of [AdapterDelegate.isForViewType].
  * @param block The DSL block. Specify here what to do when the ViewHolder gets created. Think of it as some kind of
  * initializer block. For example, you would setup a click listener on a Ui widget in that block followed by specifying
  * what to do once the ViewHolder binds to the data by specifying a bind block for
- * @since 4.3.0
+ * @since 4.1.0
  */
-inline fun <reified I : T, T, V : ViewBinding> adapterMutableListDelegateViewBinding(
-    noinline viewBinding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,
-     itemType:Int =-1,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
-    noinline block: AdapterDelegateViewBindingViewHolder<I, V>.() -> Unit
+inline fun <reified T> adapterMutableListDelegate(
+    @LayoutRes layout: Int,
+    itemType: Int = -1,
+    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, items, position -> true },
+    noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
+        LayoutInflater.from(parent.context).inflate(
+            layout,
+            parent,
+            false
+        )
+    },
+    noinline block: AbsAdapterDelegateViewHolder<T>.() -> Unit
 ): AdapterDelegate<T> {
 
-    return DslViewBindingListAdapterDelegate(
-        binding = viewBinding,
-        on = on,
+    return AbsDslListAdapterDelegate(
+        layout = layout,
         itemType = itemType,
+        on = on,
         initializerBlock = block,
+        layoutInflater = layoutInflater
     )
 }
 
+/**
+ * Delegate used internally in combination with [adapterDelegate]
+ * @since 4.1.0
+ */
 @PublishedApi
-internal class DslViewBindingListAdapterDelegate<I : T, T, V : ViewBinding>(
-    private val binding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,
-    private val on: (item: T, items: List<T>, position: Int) -> Boolean,
+internal class AbsDslListAdapterDelegate<T>(
+    @LayoutRes private val layout: Int,
     private val itemType: Int,
-    private val initializerBlock: AdapterDelegateViewBindingViewHolder<I, V>.() -> Unit,
-) : AbsListItemAdapterDelegate<I, T, AdapterDelegateViewBindingViewHolder<I, V>>() {
+    private val on: (item: T, items: List<T>, position: Int) -> Boolean,
+    private val initializerBlock: AbsAdapterDelegateViewHolder<T>.() -> Unit,
+    private val layoutInflater: (parent: ViewGroup, layout: Int) -> View
+) : AbsItemAdapterDelegate<T, AbsAdapterDelegateViewHolder<T>>() {
 
-    override fun isForViewType(item: T  & Any, items: MutableList<T>, position: Int): Boolean = on(
+    override fun isForViewType(item: T & Any, items: MutableList<T>, position: Int): Boolean = on(
         item, items, position
     )
 
@@ -86,34 +103,32 @@ internal class DslViewBindingListAdapterDelegate<I : T, T, V : ViewBinding>(
         return itemType
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup): AdapterDelegateViewBindingViewHolder<I, V> {
-        val binding = binding(LayoutInflater.from(parent.context), parent)
-        return AdapterDelegateViewBindingViewHolder<I, V>(
-            binding
+    override fun onCreateViewHolder(parent: ViewGroup): AbsAdapterDelegateViewHolder<T> =
+        AbsAdapterDelegateViewHolder<T>(
+            layoutInflater(parent, layout)
         ).also {
             initializerBlock(it)
         }
-    }
 
     override fun onBindViewHolder(
-        item: I & Any,
-        holder: AdapterDelegateViewBindingViewHolder<I, V>,
+        item: T & Any,
+        holder: AbsAdapterDelegateViewHolder<T>,
         payloads: MutableList<Any>
     ) {
-        holder._item = item as Any
+        holder._item = item
         holder._bind?.invoke(payloads) // It's ok to have an AdapterDelegate without binding block (i.e. static content)
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         @Suppress("UNCHECKED_CAST")
-        val vh = (holder as AdapterDelegateViewBindingViewHolder<I, V>)
+        val vh = (holder as AbsAdapterDelegateViewHolder<T>)
 
         vh._onViewRecycled?.invoke()
     }
 
     override fun onFailedToRecycleView(holder: RecyclerView.ViewHolder): Boolean {
         @Suppress("UNCHECKED_CAST")
-        val vh = (holder as AdapterDelegateViewBindingViewHolder<I, V>)
+        val vh = (holder as AbsAdapterDelegateViewHolder<T>)
         val block = vh._onFailedToRecycleView
         return if (block == null) {
             super.onFailedToRecycleView(holder)
@@ -124,25 +139,23 @@ internal class DslViewBindingListAdapterDelegate<I : T, T, V : ViewBinding>(
 
     override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
         @Suppress("UNCHECKED_CAST")
-        val vh = (holder as AdapterDelegateViewBindingViewHolder<I, V>)
+        val vh = (holder as AbsAdapterDelegateViewHolder<T>)
         vh._onViewAttachedToWindow?.invoke()
     }
 
     override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
         @Suppress("UNCHECKED_CAST")
-        val vh = (holder as AdapterDelegateViewBindingViewHolder<I, V>)
+        val vh = (holder as AbsAdapterDelegateViewHolder<T>)
         vh._onViewDetachedFromWindow?.invoke()
     }
 }
 
 /**
- * ViewHolder that is used internally if you use [adapterDelegateViewBinding] DSL to create your AdapterDelegate
+ * ViewHolder that is used internally if you use [adapterDelegate] DSL to create your Adapter
  *
- * @since 4.3.0
+ * @since 4.1.0
  */
-class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
-    val binding: V, view: View = binding.root
-) : RecyclerView.ViewHolder(view) {
+class AbsAdapterDelegateViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
 
     private object Uninitialized
 
@@ -172,7 +185,7 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
     /**
      * Get the context.
      *
-     * @since 4.3.0
+     * @since 4.1.1
      */
     val context: Context = view.context
 
@@ -184,7 +197,7 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
      * @return The string data associated with the resource, stripped of styled
      * text information.
      *
-     * @since 4.3.0
+     * @since 4.1.1
      */
     fun getString(@StringRes resId: Int): String {
         return context.getString(resId)
@@ -201,7 +214,7 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
      * @return The string data associated with the resource, formatted and
      * stripped of styled text information.
      *
-     * @since 4.3.0
+     * @since 4.1.1
      */
     fun getString(@StringRes resId: Int, vararg formatArgs: Any): String {
         return context.getString(resId, *formatArgs)
@@ -218,11 +231,15 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
      * @throws android.content.res.Resources.NotFoundException if the given ID
      * does not exist.
      *
-     * @since 4.3.0
+     * @since 4.1.1
      */
     @ColorInt
     fun getColor(@ColorRes id: Int): Int {
-        return ContextCompat.getColor(context, id)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getColor(id)
+        } else {
+            context.resources.getColor(id)
+        }
     }
 
     /**
@@ -236,10 +253,14 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
      * @throws android.content.res.Resources.NotFoundException if the given ID
      * does not exist.
      *
-     * @since 4.3.0
+     * @since 4.1.1
      */
-    fun getDrawable(@DrawableRes id: Int): Drawable? {
-        return ContextCompat.getDrawable(context, id)
+    fun getDrawable(@DrawableRes id: Int): Drawable {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            context.getDrawable(id)!!
+        } else {
+            context.resources.getDrawable(id)
+        }
     }
 
     /**
@@ -253,8 +274,12 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
      * @throws android.content.res.Resources.NotFoundException if the given ID
      * does not exist.
      */
-    fun getColorStateList(@ColorRes id: Int): ColorStateList? {
-        return ContextCompat.getColorStateList(context, id)
+    fun getColorStateList(@ColorRes id: Int): ColorStateList {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            context.getColorStateList(id)
+        } else {
+            context.resources.getColorStateList(id)
+        }
     }
 
     /**
@@ -301,7 +326,7 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
         if (_bind != null) {
             throw IllegalStateException("bind { ... } is already defined. Only one bind { ... } is allowed.")
         }
-        _bind = bindingBlock
+        this._bind = bindingBlock
     }
 
     /**
@@ -355,4 +380,9 @@ class AdapterDelegateViewBindingViewHolder<T, V : ViewBinding>(
         }
         _onViewDetachedFromWindow = block
     }
+
+    /**
+     * Convenience method find a given view with the given id inside the layout
+     */
+    fun <V : View> findViewById(@IdRes id: Int): V = itemView.findViewById(id) as V
 }
