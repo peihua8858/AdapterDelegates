@@ -229,16 +229,16 @@ public class AdapterDelegatesManager<T> {
      *                              ViewType)
      * @throws NullPointerException if items is null
      */
-    public int getItemViewType(@NonNull List<T> items, int position) {
+    public int getItemViewType(@NonNull T item, int position) {
 
-        if (items == null) {
+        if (item == null) {
             throw new NullPointerException("Items datasource is null!");
         }
 
         int delegatesCount = delegates.size();
         for (int i = 0; i < delegatesCount; i++) {
             AdapterDelegate<T> delegate = delegates.valueAt(i);
-            if (delegate.isForViewType(items, position)) {
+            if (delegate.isForViewType(item, position)) {
                 if (delegate.getItemType() != -1) {
                     return delegate.getItemType();
                 }
@@ -251,13 +251,7 @@ public class AdapterDelegatesManager<T> {
         }
 
         final String errorMessage;
-
-        if (items instanceof List<?>) {
-            String itemString = ((List<?>) items).get(position).toString();
-            errorMessage = "No AdapterDelegate added that matches item=" + itemString + " at position=" + position + " in data source";
-        } else {
-            errorMessage = "No AdapterDelegate added for item at position=" + position + ". items=" + items;
-        }
+        errorMessage = "No AdapterDelegate added for item at position=" + position + ". ";
 
         throw new NullPointerException(errorMessage);
     }

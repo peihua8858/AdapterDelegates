@@ -32,7 +32,7 @@ import kotlinx.android.extensions.LayoutContainer
  */
 inline fun <reified I : T, T> adapterDelegateViewContainer(
      itemType: Int = -1 ,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
+    noinline on: (item: T, position: Int) -> Boolean = { item, _ -> item is I },
     noinline createView: (parent: ViewGroup) -> View ,
     noinline block: AdapterDelegateViewContainerViewHolder<I>.() -> Unit
 ): AdapterDelegate<T> {
@@ -47,7 +47,7 @@ inline fun <reified I : T, T> adapterDelegateViewContainer(
 
 inline fun <reified I : T, T> adapterMutableListDelegateViewContainer(
      itemType:Int =  -1 ,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
+    noinline on: (item: T, position: Int) -> Boolean = { item, _ -> item is I },
     noinline createView: (parent: ViewGroup) -> View,
     noinline block: AdapterDelegateViewContainerViewHolder<I>.() -> Unit
 ): AdapterDelegate<T> {
@@ -63,13 +63,13 @@ inline fun <reified I : T, T> adapterMutableListDelegateViewContainer(
 @PublishedApi
 internal class DslViewContainerListAdapterDelegate<I : T, T>(
     private val itemType: Int,
-    private val on: (item: T, items: List<T>, position: Int) -> Boolean,
+    private val on: (item: T,position: Int) -> Boolean,
     private val initializerBlock: AdapterDelegateViewContainerViewHolder<I>.() -> Unit,
     private val createView: (parent: ViewGroup) -> View
 ) : AbsListItemAdapterDelegate<I, T, AdapterDelegateViewContainerViewHolder<I>>() {
 
-    override fun isForViewType(item: T & Any, items: MutableList<T>, position: Int): Boolean = on(
-        item, items, position
+    override fun isForViewType(item: T & Any,position: Int): Boolean = on(
+        item, position
     )
 
     override fun onCreateViewHolder(parent: ViewGroup): AdapterDelegateViewContainerViewHolder<I> =

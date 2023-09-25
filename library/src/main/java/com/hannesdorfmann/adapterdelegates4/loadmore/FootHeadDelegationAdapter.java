@@ -185,7 +185,11 @@ public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
         if (items == null || items.isEmpty()) {
             return -1;
         }
-        return delegatesManager.getItemViewType(getItems(position), position);
+        T item = items.get(getRealPosition(position));
+        if (item == null) {
+            return -1;
+        }
+        return delegatesManager.getItemViewType(item, position);
     }
 
     @Override

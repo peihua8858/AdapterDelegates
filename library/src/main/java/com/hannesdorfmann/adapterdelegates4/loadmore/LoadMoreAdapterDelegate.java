@@ -57,6 +57,11 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
         this.preLoadNumber = preLoadNumber;
     }
 
+    @Override
+    public boolean isForViewType(@NonNull T item, int position) {
+        return mAdapter.isLoadMoreData(position);
+    }
+
     @NonNull
     @Override
     protected final RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {

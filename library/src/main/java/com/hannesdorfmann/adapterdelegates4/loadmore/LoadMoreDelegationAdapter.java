@@ -40,6 +40,7 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
     protected boolean isFixedViewType(int type, int position) {
         return type == LoadMoreDelegatesManager.LOAD_MORE_ITEM_VIEW_TYPE;
     }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         delegatesManager.onBindViewHolder(getItems(position), position, holder, null);
@@ -47,8 +48,9 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
-        delegatesManager.onBindViewHolder(getItems(position),position, holder, payloads);
+        delegatesManager.onBindViewHolder(getItems(position), position, holder, payloads);
     }
+
     /**
      * When set to true, the item will layout using all span area. That means, if orientation
      * is vertical, the view will have full width; if orientation is horizontal, the view will
@@ -77,7 +79,7 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
             layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    int type = getItemViewType(position);
+                    int type = getItemViewType(getRealPosition(position));
                     if (isFixedViewType(type, position)) {
                         return layoutManager.getSpanCount();
                     }
@@ -153,11 +155,7 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
         if (loadMoreDelegatesManager.hasLoadMoreView() && isLoadMoreData(position)) {
             return LoadMoreDelegatesManager.LOAD_MORE_ITEM_VIEW_TYPE;
         }
-        List<T> items = super.getItems(position);
-        if (items == null || items.isEmpty()) {
-            return -1;
-        }
-        return delegatesManager.getItemViewType(items, position);
+        return super.getItemViewType(position);
     }
 
     public void setEnableLoadMore(boolean isEnableLoadMore) {

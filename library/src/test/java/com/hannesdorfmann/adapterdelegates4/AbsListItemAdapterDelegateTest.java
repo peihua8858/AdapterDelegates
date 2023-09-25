@@ -27,7 +27,7 @@ public class AbsListItemAdapterDelegateTest {
 
         CatAbsListItemAdapterDelegate delegate = new CatAbsListItemAdapterDelegate();
 
-        delegate.isForViewType(items, 0);
+        delegate.isForViewType(items.get(0), 0);
         Assert.assertTrue(delegate.isForViewTypeCalled);
 
         ViewGroup parent = Mockito.mock(ViewGroup.class);
@@ -61,7 +61,7 @@ public class AbsListItemAdapterDelegateTest {
 
 
         @Override
-        protected boolean isForViewType(@NonNull Animal item, @NonNull List<Animal> items, int position) {
+        public boolean isForViewType(@NonNull Animal item, int position) {
             isForViewTypeCalled = true;
             return false;
         }

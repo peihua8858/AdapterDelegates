@@ -35,7 +35,7 @@ import kotlinx.android.extensions.LayoutContainer
 inline fun <reified I : T, T> adapterDelegateLayoutContainer(
     @LayoutRes layout: Int,
      itemType: Int = -1 ,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
+    noinline on: (item: T,position: Int) -> Boolean = { item, _ -> item is I },
     noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
         LayoutInflater.from(parent.context).inflate(
             layout,
@@ -58,7 +58,7 @@ inline fun <reified I : T, T> adapterDelegateLayoutContainer(
 inline fun <reified I : T, T> adapterMutableListDelegateLayoutContainer(
     @LayoutRes layout: Int,
      itemType:Int =  -1 ,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
+    noinline on: (item: T, position: Int) -> Boolean = { item, _ -> item is I },
     noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
         LayoutInflater.from(parent.context).inflate(
             layout,
@@ -82,13 +82,13 @@ inline fun <reified I : T, T> adapterMutableListDelegateLayoutContainer(
 internal class DslLayoutContainerListAdapterDelegate<I : T, T>(
     @LayoutRes private val layout: Int,
     private val itemType: Int,
-    private val on: (item: T, items: List<T>, position: Int) -> Boolean,
+    private val on: (item: T, position: Int) -> Boolean,
     private val initializerBlock: AdapterDelegateLayoutContainerViewHolder<I>.() -> Unit,
     private val layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View
 ) : AbsListItemAdapterDelegate<I, T, AdapterDelegateLayoutContainerViewHolder<I>>() {
 
-    override fun isForViewType(item: T & Any, items: MutableList<T>, position: Int): Boolean = on(
-        item, items, position
+    override fun isForViewType(item: T & Any, position: Int): Boolean = on(
+        item, position
     )
 
     override fun onCreateViewHolder(parent: ViewGroup): AdapterDelegateLayoutContainerViewHolder<I> =

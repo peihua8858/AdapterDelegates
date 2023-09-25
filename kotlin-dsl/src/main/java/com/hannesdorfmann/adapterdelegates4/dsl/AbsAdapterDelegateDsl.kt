@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -32,7 +31,7 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
 inline fun <reified T> adapterDelegate(
     @LayoutRes layout: Int,
     itemType: Int = -1,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, items, position -> true },
+    noinline on: (item: T, position: Int) -> Boolean = { item, position -> true },
     noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
         parent.getItemView(layout)
     },
@@ -56,13 +55,13 @@ inline fun <reified T> adapterDelegate(
 internal class AbsDslListAdapterDelegate<T>(
     @LayoutRes private val layout: Int,
     private val itemType: Int,
-    private val on: (item: T, items: List<T>, position: Int) -> Boolean,
+    private val on: (item: T, position: Int) -> Boolean,
     private val initializerBlock: AbsAdapterDelegateViewHolder<T>.() -> Unit,
     private val layoutInflater: (parent: ViewGroup, layout: Int) -> View
 ) : AbsItemAdapterDelegate<T, AbsAdapterDelegateViewHolder<T>>() {
 
-    override fun isForViewType(item: T & Any, items: MutableList<T>, position: Int): Boolean = on(
-        item, items, position
+    override fun isForViewType(item: T & Any, position: Int): Boolean = on(
+        item, position
     )
 
     override fun getItemType(): Int {
@@ -78,7 +77,7 @@ internal class AbsDslListAdapterDelegate<T>(
 
     override fun onBindViewHolder(
         item: T & Any,
-        holder: AbsAdapterDelegateViewHolder<T>, position:Int,
+        holder: AbsAdapterDelegateViewHolder<T>, position: Int,
         payloads: MutableList<Any>
     ) {
         holder._item = item

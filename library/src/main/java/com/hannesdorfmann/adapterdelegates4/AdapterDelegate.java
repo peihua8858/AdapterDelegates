@@ -41,27 +41,11 @@ public abstract class AdapterDelegate<T> {
      * Called to determine whether this AdapterDelegate is the responsible for the given data
      * element.
      *
-     * @param items    The data source of the Adapter
+     * @param item     The data source of the Adapter
      * @param position The position in the datasource
      * @return true, if this item is responsible,  otherwise false
      */
-    public boolean isForViewType(@NonNull List<T> items, int position) {
-        return isForViewType(items.get(position), items, position);
-    }
-
-    /**
-     * Called to determine whether this AdapterDelegate is the responsible for the given item in the
-     * list or not
-     * element
-     *
-     * @param item     The item from the list at the given position
-     * @param items    The items from adapters dataset
-     * @param position The items position in the dataset (list)
-     * @return true if this AdapterDelegate is responsible for that, otherwise false
-     */
-    protected boolean isForViewType(@NonNull T item, @NonNull List<T> items, int position) {
-        return false;
-    }
+    public abstract boolean isForViewType(@NonNull T item, int position);
 
     public int getItemType() {
         return -1;

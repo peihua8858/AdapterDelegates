@@ -68,6 +68,7 @@ public class PagedListDelegationAdapter<T> extends PagedListAdapter<T, RecyclerV
         }
         this.delegatesManager = delegatesManager;
     }
+
     public PagedListDelegationAdapter<T> addDelegate(@NonNull AdapterDelegate<T>... delegates) {
         for (AdapterDelegate<T> delegate : delegates) {
             delegatesManager.addDelegate(delegate);
@@ -88,6 +89,7 @@ public class PagedListDelegationAdapter<T> extends PagedListAdapter<T, RecyclerV
     public AdapterDelegate<T> getAdapterDelegate(int viewType) {
         return delegatesManager.getDelegateForViewType(viewType);
     }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -109,7 +111,15 @@ public class PagedListDelegationAdapter<T> extends PagedListAdapter<T, RecyclerV
 
     @Override
     public int getItemViewType(int position) {
-        return delegatesManager.getItemViewType(getCurrentList(), position);
+        List<T> items = getCurrentList();
+        if (items == null || items.isEmpty()) {
+            return -1;
+        }
+        T item = items.get(position);
+        if (item == null) {
+            return -1;
+        }
+        return delegatesManager.getItemViewType(item, position);
     }
 
     @Override

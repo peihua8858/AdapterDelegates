@@ -105,7 +105,7 @@ public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return delegatesManager.getItemViewType(items, position);
+        return delegatesManager.getItemViewType(items.get(position), position);
     }
 
     @Override

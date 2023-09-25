@@ -43,26 +43,9 @@ public abstract class AbsListItemAdapterDelegate<I extends T, T, VH extends Recy
         extends AdapterDelegate<T> {
 
     @Override
-    public final boolean isForViewType(@NonNull List<T> items, int position) {
-        return isForViewType(items.get(position), items, position);
-    }
-
-    @Override
     protected void onBindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
         onBindViewHolder((I) item, (VH) holder, payloads);
     }
-
-    /**
-     * Called to determine whether this AdapterDelegate is the responsible for the given item in the
-     * list or not
-     * element
-     *
-     * @param item     The item from the list at the given position
-     * @param items    The items from adapters dataset
-     * @param position The items position in the dataset (list)
-     * @return true if this AdapterDelegate is responsible for that, otherwise false
-     */
-    protected abstract boolean isForViewType(@NonNull T item, @NonNull List<T> items, int position);
 
     /**
      * Creates the  {@link RecyclerView.ViewHolder} for the given data source item

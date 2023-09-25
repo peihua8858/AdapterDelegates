@@ -1,10 +1,6 @@
 package com.hannesdorfmann.adapterdelegates4;
 
 
-import androidx.annotation.NonNull;
-
-import java.util.List;
-
 /**
  * This class can be used as base class for a fallback delegate {@link
  * AdapterDelegatesManager#setFallbackDelegate(AdapterDelegate)}.
@@ -14,14 +10,4 @@ import java.util.List;
  */
 public abstract class AbsFallbackAdapterDelegate<T> extends AdapterDelegate<T> {
 
-  /**
-   * Not needed, because never called for fallback adapter delegates.
-   *
-   * @param items The data source of the Adapter
-   * @param position The position in the datasource
-   * @return true
-   */
-  @Override final public boolean isForViewType(@NonNull List<T> items, int position) {
-    return true;
-  }
 }

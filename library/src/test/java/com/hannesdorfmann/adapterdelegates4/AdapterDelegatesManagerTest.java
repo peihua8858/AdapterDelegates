@@ -24,14 +24,10 @@ public class AdapterDelegatesManagerTest {
 
         AdapterDelegate d1 = new AdapterDelegate<Object>() {
             @Override
-            public boolean isForViewType(@NonNull List<Object> items, int position) {
+            public boolean isForViewType(@NonNull Object item, int position) {
                 return false;
             }
 
-            @Override
-            protected boolean isForViewType(@NonNull Object item, @NonNull List<Object> items, int position) {
-                return false;
-            }
 
             @NonNull
             @Override
@@ -47,12 +43,7 @@ public class AdapterDelegatesManagerTest {
 
         AdapterDelegate d2 = new AdapterDelegate<Object>() {
             @Override
-            public boolean isForViewType(@NonNull List<Object> items, int position) {
-                return false;
-            }
-
-            @Override
-            protected boolean isForViewType(@NonNull Object item, @NonNull List<Object> items, int position) {
+            public boolean isForViewType(@NonNull Object item, int position) {
                 return false;
             }
 
@@ -119,7 +110,7 @@ public class AdapterDelegatesManagerTest {
         manager.addDelegate(d2);
 
         // Test first item
-        int viewType = manager.getItemViewType(items, 0);
+        int viewType = manager.getItemViewType(items.get(0), 0);
         Assert.assertEquals(viewType, 0);
         Assert.assertTrue(d0.isForViewTypeReturnedYes);
         Assert.assertFalse(d1.isForViewTypeReturnedYes);
@@ -127,7 +118,7 @@ public class AdapterDelegatesManagerTest {
         resetDelegates(d0, d1, d2);
 
         // Test second item
-        viewType = manager.getItemViewType(items, 1);
+        viewType = manager.getItemViewType(items.get(1), 1);
         Assert.assertEquals(viewType, 1);
         Assert.assertTrue(d1.isForViewTypeReturnedYes);
         Assert.assertFalse(d0.isForViewTypeReturnedYes);
@@ -135,7 +126,7 @@ public class AdapterDelegatesManagerTest {
         resetDelegates(d0, d1, d2);
 
         // Test third item
-        viewType = manager.getItemViewType(items, 2);
+        viewType = manager.getItemViewType(items.get(2),2);
         Assert.assertEquals(viewType, 2);
         Assert.assertTrue(d2.isForViewTypeReturnedYes);
         Assert.assertFalse(d0.isForViewTypeReturnedYes);
@@ -404,7 +395,7 @@ public class AdapterDelegatesManagerTest {
         for (int i = 0; i < items.size(); i++) {
             SpyableAdapterDelegate<Object> expectedDelegate = delegates[i];
 
-            int viewType = manager.getItemViewType(items, i);
+            int viewType = manager.getItemViewType(items.get(i), i);
 
             // Test view type
             Assert.assertEquals(viewType, expectedDelegate.viewType);

@@ -152,7 +152,15 @@ public class AsyncListDifferDelegationAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        return delegatesManager.getItemViewType(differ.getCurrentList(), position);
+        List<T> items = differ.getCurrentList();
+        if (items.isEmpty()) {
+            return -1;
+        }
+        T item = items.get(position);
+        if (item == null) {
+            return -1;
+        }
+        return delegatesManager.getItemViewType(item, position);
     }
 
     @Override

@@ -30,8 +30,8 @@ import com.hannesdorfmann.adapterdelegates4.AdapterDelegate
  */
 inline fun <reified I : T, T, V : ViewBinding> adapterDelegateViewBinding(
     noinline viewBinding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,
-     itemType:Int =  -1 ,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
+    itemType: Int = -1,
+    noinline on: (item: T, position: Int) -> Boolean = { item, _ -> item is I },
     noinline block: AdapterDelegateViewBindingViewHolder<I, V>.() -> Unit
 ): AdapterDelegate<T> {
 
@@ -57,8 +57,8 @@ inline fun <reified I : T, T, V : ViewBinding> adapterDelegateViewBinding(
  */
 inline fun <reified I : T, T, V : ViewBinding> adapterMutableListDelegateViewBinding(
     noinline viewBinding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,
-     itemType:Int =-1,
-    noinline on: (item: T, items: List<T>, position: Int) -> Boolean = { item, _, _ -> item is I },
+    itemType: Int = -1,
+    noinline on: (item: T, position: Int) -> Boolean = { item,  _ -> item is I },
     noinline block: AdapterDelegateViewBindingViewHolder<I, V>.() -> Unit
 ): AdapterDelegate<T> {
 
@@ -73,13 +73,13 @@ inline fun <reified I : T, T, V : ViewBinding> adapterMutableListDelegateViewBin
 @PublishedApi
 internal class DslViewBindingListAdapterDelegate<I : T, T, V : ViewBinding>(
     private val binding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,
-    private val on: (item: T, items: List<T>, position: Int) -> Boolean,
+    private val on: (item: T, position: Int) -> Boolean,
     private val itemType: Int,
     private val initializerBlock: AdapterDelegateViewBindingViewHolder<I, V>.() -> Unit,
 ) : AbsListItemAdapterDelegate<I, T, AdapterDelegateViewBindingViewHolder<I, V>>() {
 
-    override fun isForViewType(item: T  & Any, items: MutableList<T>, position: Int): Boolean = on(
-        item, items, position
+    override fun isForViewType(item: T & Any, position: Int): Boolean = on(
+        item, position
     )
 
     override fun getItemType(): Int {

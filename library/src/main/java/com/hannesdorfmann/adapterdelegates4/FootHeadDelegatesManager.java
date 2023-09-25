@@ -125,22 +125,22 @@ public class FootHeadDelegatesManager<T> extends AdapterDelegatesManager<T> {
     }
 
     @Override
-    public int getItemViewType(@NonNull List<T> items, int position) {
-        if (items == null) {
+    public int getItemViewType(@NonNull T item, int position) {
+        if (item == null) {
             throw new NullPointerException("Items datasource is null!");
         }
-        Integer itemType = getFootHeadItemViewType(items, position);
+        Integer itemType = getFootHeadItemViewType(item, position);
         if (itemType != null) {
             return itemType;
         }
-        return super.getItemViewType(items, position);
+        return super.getItemViewType(item, position);
     }
 
-    public Integer getFootHeadItemViewType(@NonNull List<T> items, int position) {
+    public Integer getFootHeadItemViewType(@NonNull T item, int position) {
         int delegatesCount = headerDelegates.size();
         for (int i = 0; i < delegatesCount; i++) {
             AdapterDelegate<T> delegate = headerDelegates.valueAt(i);
-            if (delegate.isForViewType(items, position)) {
+            if (delegate.isForViewType(item, position)) {
                 if (delegate.getItemType() != -1) {
                     return delegate.getItemType();
                 }
@@ -150,7 +150,7 @@ public class FootHeadDelegatesManager<T> extends AdapterDelegatesManager<T> {
         int delegatesCount1 = footerDelegates.size();
         for (int i = 0; i < delegatesCount1; i++) {
             AdapterDelegate<T> delegate = footerDelegates.valueAt(i);
-            if (delegate.isForViewType(items, position)) {
+            if (delegate.isForViewType(item, position)) {
                 if (delegate.getItemType() != -1) {
                     return delegate.getItemType();
                 }
