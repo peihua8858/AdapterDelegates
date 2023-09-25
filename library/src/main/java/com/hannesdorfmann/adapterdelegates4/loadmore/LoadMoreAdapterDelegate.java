@@ -85,12 +85,12 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
 
     @Override
     public void bindViewHolder(@NonNull List<T> items, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
-        convert(holder, position);
+        onBindViewHolder(holder, position);
     }
 
     @Override
     public final void onBindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
-        convert(holder, position);
+        onBindViewHolder(holder, position);
     }
 
     public boolean hasLoadMoreView() {
@@ -172,7 +172,7 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
      * @param holder   BaseViewHolder
      * @param position Int
      */
-    void convert(RecyclerView.ViewHolder holder, int position) {
+    void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         autoLoadMore(position);
         switch (loadMoreStatus) {
             case Complete:

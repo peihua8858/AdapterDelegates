@@ -43,12 +43,20 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        delegatesManager.onBindViewHolder(getItems(position), position, holder, null);
+        if (isLoadMoreData(position)) {
+            loadMoreDelegatesManager.onBindLoadMoreViewHolder(holder, position);
+        } else {
+            super.onBindViewHolder(holder, position);
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
-        delegatesManager.onBindViewHolder(getItems(position), position, holder, payloads);
+        if (isLoadMoreData(position)) {
+            loadMoreDelegatesManager.onBindLoadMoreViewHolder(holder, position);
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
     }
 
     /**
