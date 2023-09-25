@@ -42,12 +42,12 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        delegatesManager.onBindViewHolder(getItems(position), getRealPosition(position), holder, null);
+        delegatesManager.onBindViewHolder(getItems(position), position, holder, null);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
-        delegatesManager.onBindViewHolder(getItems(position), getRealPosition(position), holder, payloads);
+        delegatesManager.onBindViewHolder(getItems(position),position, holder, payloads);
     }
     /**
      * When set to true, the item will layout using all span area. That means, if orientation
@@ -157,7 +157,7 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
         if (items == null || items.isEmpty()) {
             return -1;
         }
-        return delegatesManager.getItemViewType(items, getRealPosition(position));
+        return delegatesManager.getItemViewType(items, position);
     }
 
     public void setEnableLoadMore(boolean isEnableLoadMore) {
