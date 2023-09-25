@@ -75,6 +75,11 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
     }
 
     @Override
+    public void bindViewHolder(@NonNull List<T> items, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
+        convert(holder, position);
+    }
+
+    @Override
     public final void onBindViewHolder(@NonNull T item, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
         convert(holder, position);
     }
@@ -155,8 +160,8 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
     /**
      * 可重写此方式，实行自定义逻辑
      *
-     * @param holder         BaseViewHolder
-     * @param position       Int
+     * @param holder   BaseViewHolder
+     * @param position Int
      */
     void convert(RecyclerView.ViewHolder holder, int position) {
         autoLoadMore(position);
@@ -218,7 +223,7 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
      * @date 2023/3/7 9:26
      * @version 1.0
      */
-   private void autoLoadMore(int position) {
+    private void autoLoadMore(int position) {
         if (!isAutoLoadMore) {
             //如果不需要自动加载更多，直接返回
             return;

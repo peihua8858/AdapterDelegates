@@ -59,7 +59,7 @@ public abstract class AdapterDelegate<T> {
      * @param position The items position in the dataset (list)
      * @return true if this AdapterDelegate is responsible for that, otherwise false
      */
-    protected boolean isForViewType(@NonNull T item, @NonNull List<T> items, int position){
+    protected boolean isForViewType(@NonNull T item, @NonNull List<T> items, int position) {
         return false;
     }
 
@@ -116,7 +116,9 @@ public abstract class AdapterDelegate<T> {
      * @param holder   The {@link RecyclerView.ViewHolder} to bind
      */
     public void bindViewHolder(@NonNull List<T> items, int position, @NonNull RecyclerView.ViewHolder holder, @NonNull List<Object> payloads) {
-        bindViewHolder(items.get(position), position, holder, payloads);
+        if (items != null && !items.isEmpty()) {
+            bindViewHolder(items.get(position), position, holder, payloads);
+        }
     }
 
     /**

@@ -40,7 +40,15 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
     protected boolean isFixedViewType(int type, int position) {
         return type == LoadMoreDelegatesManager.LOAD_MORE_ITEM_VIEW_TYPE;
     }
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        delegatesManager.onBindViewHolder(getItems(position), getRealPosition(position), holder, null);
+    }
 
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
+        delegatesManager.onBindViewHolder(getItems(position), getRealPosition(position), holder, payloads);
+    }
     /**
      * When set to true, the item will layout using all span area. That means, if orientation
      * is vertical, the view will have full width; if orientation is horizontal, the view will
