@@ -181,6 +181,10 @@ public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
 
     @Override
     public int getItemViewType(int position) {
+        List<T> items = getItems(position);
+        if (items == null || items.isEmpty()) {
+            return -1;
+        }
         return delegatesManager.getItemViewType(getItems(position), getRealPosition(position));
     }
 
@@ -217,7 +221,7 @@ public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
     @Override
     public void addData(@IntRange(from = 0) int position, T data) {
         if (items == null) {
-            items= new ArrayList<>();
+            items = new ArrayList<>();
         }
         this.items.add(position, data);
         notifyItemInserted(position + headCount());
@@ -231,7 +235,7 @@ public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
     @Override
     public void addData(@NonNull T data) {
         if (items == null) {
-            items= new ArrayList<>();
+            items = new ArrayList<>();
         }
         this.items.add(data);
         notifyItemInserted(this.items.size() + headCount());
@@ -248,7 +252,7 @@ public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
     @Override
     public void addData(@IntRange(from = 0) int position, Collection newData) {
         if (items == null) {
-            items= new ArrayList<>();
+            items = new ArrayList<>();
         }
         this.items.addAll(position, newData);
         notifyItemRangeInserted(position + headCount(), newData.size());
@@ -258,7 +262,7 @@ public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
     @Override
     public void addData(@NonNull Collection newData) {
         if (items == null) {
-            items= new ArrayList<>();
+            items = new ArrayList<>();
         }
         this.items.addAll(newData);
         notifyItemRangeInserted(this.items.size() - newData.size() + headCount(), newData.size());

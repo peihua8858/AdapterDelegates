@@ -145,6 +145,10 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
         if (loadMoreDelegatesManager.hasLoadMoreView() && isLoadMoreData(position)) {
             return LoadMoreDelegatesManager.LOAD_MORE_ITEM_VIEW_TYPE;
         }
+        List<T> items = super.getItems(position);
+        if (items == null || items.isEmpty()) {
+            return -1;
+        }
         return delegatesManager.getItemViewType(items, getRealPosition(position));
     }
 
