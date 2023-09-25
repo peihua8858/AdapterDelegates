@@ -1,14 +1,13 @@
 package com.hannesdorfmann.adapterdelegates4;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public abstract class AbsAdapterDelegate<T> extends AdapterDelegate<T> {
     @Override
     public boolean isForViewType(List<T> items, int position) {
-        return isForViewType(items.get(position));
+        return isForViewType(items.get(position),items,position);
     }
 
     @Override
