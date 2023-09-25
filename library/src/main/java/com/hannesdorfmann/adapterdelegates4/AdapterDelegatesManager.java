@@ -297,15 +297,7 @@ public class AdapterDelegatesManager<T> {
     public void onBindViewHolder(@NonNull List<T> items, int position,
                                  @NonNull RecyclerView.ViewHolder holder, List payloads) {
 
-        AdapterDelegate<T> delegate = getDelegateForViewType(holder.getItemViewType());
-        if (delegate == null) {
-            throw new NullPointerException("No delegate found for item at position = "
-                    + position
-                    + " for viewType = "
-                    + holder.getItemViewType());
-        }
-        delegate.bindViewHolder(items, position, holder,
-                payloads != null ? payloads : PAYLOADS_EMPTY_LIST);
+        onBindViewHolder(items.get(position), position, holder, payloads);
     }
 
     /**

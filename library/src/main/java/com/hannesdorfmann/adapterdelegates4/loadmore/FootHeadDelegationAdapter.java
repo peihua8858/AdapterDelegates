@@ -127,13 +127,22 @@ public class FootHeadDelegationAdapter<T> extends ListDelegationAdapter<T> {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        delegatesManager.onBindViewHolder(getItems(position), position, holder, null);
+        List<T> items = getItems(position);
+        if (items != null && !items.isEmpty()) {
+            T item = items.get(getRealPosition(position));
+            delegatesManager.onBindViewHolder(item, position, holder, new ArrayList<>());
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
-        delegatesManager.onBindViewHolder(getItems(position), position, holder, payloads);
+        List<T> items = getItems(position);
+        if (items != null && !items.isEmpty()) {
+            T item = items.get(getRealPosition(position));
+            delegatesManager.onBindViewHolder(item, position, holder, payloads);
+        }
     }
+
 
     @Override
     public void setItems(@Nullable List<T> items) {

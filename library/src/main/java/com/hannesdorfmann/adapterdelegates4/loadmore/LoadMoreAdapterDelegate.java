@@ -62,6 +62,10 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
         return mAdapter.isLoadMoreData(position);
     }
 
+    public boolean isLoadMoreData(int position) {
+        return mAdapter.isLoadMoreData(position);
+    }
+
     @NonNull
     @Override
     protected final RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {

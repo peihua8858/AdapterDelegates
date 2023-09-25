@@ -100,7 +100,7 @@ public abstract class AbsDelegationAdapter<T> extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List payloads) {
-        delegatesManager.onBindViewHolder(items, position, holder, payloads);
+        delegatesManager.onBindViewHolder(items.get(position), position, holder, payloads);
     }
 
     @Override

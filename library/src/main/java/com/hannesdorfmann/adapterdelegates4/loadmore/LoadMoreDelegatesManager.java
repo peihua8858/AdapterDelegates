@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.hannesdorfmann.adapterdelegates4.AdapterDelegate;
 import com.hannesdorfmann.adapterdelegates4.FootHeadDelegatesManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 加载更多委托管理器
  *
@@ -31,6 +34,33 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return super.onCreateViewHolder(parent, viewType);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull List<T> items, int position, @NonNull RecyclerView.ViewHolder holder, List payloads) {
+        if (loadMoreAdapterDelegate != null && loadMoreAdapterDelegate.isLoadMoreData(position)) {
+            loadMoreAdapterDelegate.bindViewHolder(items, position, holder, payloads);
+            return;
+        }
+        super.onBindViewHolder(items, position, holder, payloads);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull T items, int position, @NonNull RecyclerView.ViewHolder holder, List payloads) {
+        if (loadMoreAdapterDelegate != null && loadMoreAdapterDelegate.isLoadMoreData(position)) {
+            loadMoreAdapterDelegate.bindViewHolder(items, position, holder, payloads);
+            return;
+        }
+        super.onBindViewHolder(items, position, holder, payloads);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull T items, int position, @NonNull RecyclerView.ViewHolder holder) {
+        if (loadMoreAdapterDelegate != null && loadMoreAdapterDelegate.isLoadMoreData(position)) {
+            loadMoreAdapterDelegate.bindViewHolder(items, position, holder, new ArrayList<>());
+            return;
+        }
+        super.onBindViewHolder(items, position, holder);
     }
 
     @Override
