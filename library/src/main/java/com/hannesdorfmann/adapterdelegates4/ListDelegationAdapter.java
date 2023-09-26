@@ -159,10 +159,10 @@ public class ListDelegationAdapter<T> extends AbsDelegationAdapter<T> {
     }
 
     @Nullable
-    public <I> I getItem(int position) {
+    public T getItem(int position) {
         if (items != null && !items.isEmpty()) {
             if (position >= 0 && position < items.size()) {
-                return (I) items.get(position);
+                return items.get(position);
             }
         }
         return null;
