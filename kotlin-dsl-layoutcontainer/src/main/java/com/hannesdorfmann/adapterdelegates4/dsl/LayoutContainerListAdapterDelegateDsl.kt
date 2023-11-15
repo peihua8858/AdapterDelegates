@@ -55,29 +55,6 @@ inline fun <reified I : T, T> adapterDelegateLayoutContainer(
     )
 }
 
-inline fun <reified I : T, T> adapterMutableListDelegateLayoutContainer(
-    @LayoutRes layout: Int,
-     itemType:Int =  -1 ,
-    noinline on: (item: T, position: Int) -> Boolean = { item, _ -> item is I },
-    noinline layoutInflater: (parent: ViewGroup, layoutRes: Int) -> View = { parent, layout ->
-        LayoutInflater.from(parent.context).inflate(
-            layout,
-            parent,
-            false
-        )
-    },
-    noinline block: AdapterDelegateLayoutContainerViewHolder<I>.() -> Unit
-): AdapterDelegate<T> {
-
-    return DslLayoutContainerListAdapterDelegate(
-        layout = layout,
-        itemType = itemType,
-        on = on,
-        initializerBlock = block,
-        layoutInflater = layoutInflater
-    )
-}
-
 @PublishedApi
 internal class DslLayoutContainerListAdapterDelegate<I : T, T>(
     @LayoutRes private val layout: Int,

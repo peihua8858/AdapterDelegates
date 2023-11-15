@@ -45,21 +45,6 @@ inline fun <reified I : T, T> adapterDelegateViewContainer(
     )
 }
 
-inline fun <reified I : T, T> adapterMutableListDelegateViewContainer(
-     itemType:Int =  -1 ,
-    noinline on: (item: T, position: Int) -> Boolean = { item, _ -> item is I },
-    noinline createView: (parent: ViewGroup) -> View,
-    noinline block: AdapterDelegateViewContainerViewHolder<I>.() -> Unit
-): AdapterDelegate<T> {
-
-    return DslViewContainerListAdapterDelegate(
-        itemType = itemType,
-        on = on,
-        initializerBlock = block,
-        createView = createView
-    )
-}
-
 @PublishedApi
 internal class DslViewContainerListAdapterDelegate<I : T, T>(
     private val itemType: Int,

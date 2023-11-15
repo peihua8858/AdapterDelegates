@@ -43,33 +43,6 @@ inline fun <reified I : T, T, V : ViewBinding> adapterDelegateViewBinding(
     )
 }
 
-/**
- * Simple DSL builder to create an [AdapterDelegate] that is backed by a [List] as dataset.
- * This DSL builds on top of [ViewBinding] so that no findViewById is needed anymore.
- *
- * @param viewBinding return a [ViewBinding] for this adapter delegate.
- * @param on The check that should be run if the AdapterDelegate is for the corresponding Item in the datasource.
- * In other words its the implementation of [AdapterDelegate.isForViewType].
- * @param block The DSL block. Specify here what to do when the ViewHolder gets created. Think of it as some kind of
- * initializer block. For example, you would setup a click listener on a Ui widget in that block followed by specifying
- * what to do once the ViewHolder binds to the data by specifying a bind block for
- * @since 4.3.0
- */
-inline fun <reified I : T, T, V : ViewBinding> adapterMutableListDelegateViewBinding(
-    noinline viewBinding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,
-    itemType: Int = -1,
-    noinline on: (item: T, position: Int) -> Boolean = { item,  _ -> item is I },
-    noinline block: AdapterDelegateViewBindingViewHolder<I, V>.() -> Unit
-): AdapterDelegate<T> {
-
-    return DslViewBindingListAdapterDelegate(
-        binding = viewBinding,
-        on = on,
-        itemType = itemType,
-        initializerBlock = block,
-    )
-}
-
 @PublishedApi
 internal class DslViewBindingListAdapterDelegate<I : T, T, V : ViewBinding>(
     private val binding: (layoutInflater: LayoutInflater, parent: ViewGroup) -> V,

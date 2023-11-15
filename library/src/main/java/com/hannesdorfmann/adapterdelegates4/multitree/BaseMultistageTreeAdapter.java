@@ -463,7 +463,7 @@ public abstract class BaseMultistageTreeAdapter<T> extends LoadMoreDelegationAda
         } else if (level == -1) {
             return -1;
         }
-        for (int i = position; i > 0; i--) {
+        for (int i = position; i >= 0; i--) {
             T temp = getItem(i);
             if (temp instanceof IExpandable) {
                 int tempLevel = ((IExpandable<?>) temp).getLevel();
