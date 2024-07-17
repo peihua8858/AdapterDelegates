@@ -25,9 +25,11 @@ abstract class ViewBindingAbsAdapterDelegate<T, VB : ViewBinding> : AbsAdapterDe
         get() = mBinding != null
 
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+        val view= LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
+        val binding= vbFactory(view)
         val holder =
-            AbsDelegateViewHolder(LayoutInflater.from(parent.context).inflate(layoutResId, parent, false), vbFactory)
-        mBinding = holder.binding
+            AbsDelegateViewHolder(LayoutInflater.from(parent.context).inflate(layoutResId, parent, false),binding)
+        mBinding =holder.binding
         return holder
     }
 
