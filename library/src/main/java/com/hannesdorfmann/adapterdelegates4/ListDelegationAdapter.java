@@ -45,15 +45,12 @@ import androidx.recyclerview.widget.AsyncListDiffer;
  * @author Hannes Dorfmann
  */
 public class ListDelegationAdapter<T> extends AbsDelegationAdapter<T> {
-    protected final AsyncListDiffer<T> differ;
     public ListDelegationAdapter() {
         super();
-        this.differ = new AsyncListDiffer<T>(this, null);
     }
 
     public ListDelegationAdapter(@NonNull AdapterDelegatesManager<T> delegatesManager) {
         super(delegatesManager);
-        this.differ = new AsyncListDiffer<T>(this, null);
     }
 
     /**
@@ -64,7 +61,6 @@ public class ListDelegationAdapter<T> extends AbsDelegationAdapter<T> {
      */
     public ListDelegationAdapter(@NonNull AdapterDelegate<T>... delegates) {
         super(delegates);
-        this.differ = new AsyncListDiffer<T>(this, null);
     }
 
     @Override

@@ -143,7 +143,12 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
     void loadMoreFail() {
         if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreFail();
     }
-
+    /**
+     * Refresh failed
+     */
+    void loadMoreNoNetwork() {
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreNoNetwork();
+    }
     /**
      * 重置状态
      */

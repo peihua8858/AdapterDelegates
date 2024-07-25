@@ -71,7 +71,9 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
     protected final RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent) {
         View rootView = getRootView(parent);
         rootView.setOnClickListener(v -> {
-            if (loadMoreStatus == LoadMoreStatus.Fail) {
+            if (loadMoreStatus == LoadMoreStatus.NoNetwork) {
+                loadMoreToLoading();
+            } else if (loadMoreStatus == LoadMoreStatus.Fail) {
                 loadMoreToLoading();
             } else if (loadMoreStatus == LoadMoreStatus.Complete) {
                 loadMoreToLoading();
@@ -165,6 +167,15 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
      * @return View
      */
     public abstract View getLoadFailView(RecyclerView.ViewHolder holder);
+    /**
+     * 布局中的 没有网络布局
+     *
+     * @param holder BaseViewHolder
+     * @return View
+     */
+    public  View getLoadNoNetworkView(RecyclerView.ViewHolder holder){
+        return getLoadFailView(holder);
+    }
 
     /**
      * 可重写此方式，实行自定义逻辑
@@ -180,24 +191,35 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
                 isVisible(getLoadComplete(holder), true);
                 isVisible(getLoadFailView(holder), false);
                 isVisible(getLoadEndView(holder), false);
+                isVisible(getLoadNoNetworkView(holder), false);
                 break;
             case Loading:
                 isVisible(getLoadingView(holder), true);
                 isVisible(getLoadComplete(holder), false);
                 isVisible(getLoadFailView(holder), false);
                 isVisible(getLoadEndView(holder), false);
+                isVisible(getLoadNoNetworkView(holder), false);
                 break;
             case Fail:
                 isVisible(getLoadingView(holder), false);
                 isVisible(getLoadComplete(holder), false);
                 isVisible(getLoadFailView(holder), true);
                 isVisible(getLoadEndView(holder), false);
+                isVisible(getLoadNoNetworkView(holder), false);
                 break;
             case End:
                 isVisible(getLoadingView(holder), false);
                 isVisible(getLoadComplete(holder), false);
                 isVisible(getLoadFailView(holder), false);
+                isVisible(getLoadNoNetworkView(holder), false);
                 isVisible(getLoadEndView(holder), true);
+                break;
+            case NoNetwork:
+                isVisible(getLoadingView(holder), false);
+                isVisible(getLoadComplete(holder), false);
+                isVisible(getLoadFailView(holder), false);
+                isVisible(getLoadEndView(holder), false);
+                isVisible(getLoadNoNetworkView(holder), true);
                 break;
             default:
                 break;
@@ -351,6 +373,17 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
             return;
         }
         loadMoreStatus = LoadMoreStatus.Fail;
+        mAdapter.notifyItemChanged(mAdapter.loadMoreViewPosition());
+    }
+
+    /**
+     * Refresh failed
+     */
+    void loadMoreNoNetwork() {
+        if (!hasLoadMoreView()) {
+            return;
+        }
+        loadMoreStatus = LoadMoreStatus.NoNetwork;
         mAdapter.notifyItemChanged(mAdapter.loadMoreViewPosition());
     }
 

@@ -5,5 +5,5 @@ package com.hannesdorfmann.adapterdelegates4.loadmore;
  */
 
 public enum LoadMoreStatus {
-    Complete, Loading, Fail, End
+    Complete, Loading, Fail,NoNetwork, End
 }

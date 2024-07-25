@@ -209,6 +209,15 @@ public class LoadMoreDelegationAdapter<T> extends FootHeadDelegationAdapter<T> {
     }
 
     /**
+     * Refresh no network
+     */
+    public void loadMoreNoNetwork() {
+        if (loadMoreDelegatesManager != null) {
+            loadMoreDelegatesManager.loadMoreNoNetwork();
+        }
+    }
+
+    /**
      * 重置状态
      */
     public void reset() {
