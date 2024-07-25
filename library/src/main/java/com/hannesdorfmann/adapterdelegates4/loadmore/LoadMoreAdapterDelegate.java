@@ -254,7 +254,7 @@ public abstract class LoadMoreAdapterDelegate<T> extends AbsAdapterDelegate<T> {
      * @date 2023/3/7 9:26
      * @version 1.0
      */
-    private void autoLoadMore(int position) {
+     void autoLoadMore(int position) {
         if (!isAutoLoadMore) {
             //如果不需要自动加载更多，直接返回
             return;

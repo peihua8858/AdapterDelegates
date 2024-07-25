@@ -37,6 +37,7 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
     }
 
     void onBindLoadMoreViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        autoLoadMore(position);
         if (loadMoreAdapterDelegate != null) {
             loadMoreAdapterDelegate.onBindViewHolder(holder, position);
         }
@@ -44,6 +45,7 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
 
     @Override
     public void onBindViewHolder(@NonNull List<T> items, int position, @NonNull RecyclerView.ViewHolder holder, List payloads) {
+        autoLoadMore(position);
         if (loadMoreAdapterDelegate != null && loadMoreAdapterDelegate.isLoadMoreData(position)) {
             loadMoreAdapterDelegate.onBindViewHolder(holder, position);
             return;
@@ -53,6 +55,7 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
 
     @Override
     public void onBindViewHolder(@NonNull T items, int position, @NonNull RecyclerView.ViewHolder holder, List payloads) {
+        autoLoadMore(position);
         if (loadMoreAdapterDelegate != null && loadMoreAdapterDelegate.isLoadMoreData(position)) {
             loadMoreAdapterDelegate.bindViewHolder(items, position, holder, payloads);
             return;
@@ -62,6 +65,7 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
 
     @Override
     public void onBindViewHolder(@NonNull T items, int position, @NonNull RecyclerView.ViewHolder holder) {
+        autoLoadMore(position);
         if (loadMoreAdapterDelegate != null && loadMoreAdapterDelegate.isLoadMoreData(position)) {
             loadMoreAdapterDelegate.bindViewHolder(items, position, holder, new ArrayList<>());
             return;
@@ -143,12 +147,14 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
     void loadMoreFail() {
         if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreFail();
     }
+
     /**
      * Refresh failed
      */
     void loadMoreNoNetwork() {
         if (isEnabledLoadMore()) loadMoreAdapterDelegate.loadMoreNoNetwork();
     }
+
     /**
      * 重置状态
      */
@@ -161,5 +167,9 @@ public class LoadMoreDelegatesManager<T> extends FootHeadDelegatesManager<T> {
     public boolean hasLoadMoreView() {
         if (isEnabledLoadMore()) return loadMoreAdapterDelegate.hasLoadMoreView();
         return false;
+    }
+
+    void autoLoadMore(int position) {
+        if (isEnabledLoadMore()) loadMoreAdapterDelegate.autoLoadMore(position);
     }
 }
